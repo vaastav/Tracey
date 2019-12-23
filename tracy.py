@@ -1,5 +1,6 @@
 from flask import Flask, request
 import json
+import sys
 
 api = Flask(__name__)
 
@@ -10,7 +11,14 @@ def summary():
     return json.dumps({"error": "Not Implemented"})
 
 def main():
-    api.run()
+    if len(sys.argv) != 2:
+        print("Usage: python tracy.py <config_file>")
+        sys.exit(1)
+    config_file = sys.argv[1]
+    with open(config_file, 'r+') as inf:
+        config = json.load(inf)
+        print(config)
+    api.run(host=config["host"], port=config["port"])
 
 if __name__ == '__main__':
     main()
