@@ -13,7 +13,7 @@ We will measure the summarization ability of our tool by comparing lengths of su
 their generation. As the number of traces increase, the lengths of the summaries should not grow exponentially or linearly. We want the 
 reports to be no longer than a page for large numbers of traces and a paragraph for smaller nubmers. Additionally, we will perform measures 
 of redundancy to ensure we are not repeating information in our summaries, making them artifically long. We will obtain these measures using
-a unique n-gram ratio.
+a unique n-gram ratio and normalized inverse of diversity.
 
 Finally we will measure preservation of important information by manually identifying critical data in the traces, and counting how many
 appear in summarizations. This evaluation will be applied to traces of varying sizes. We expect to preserve the majority of critical 
