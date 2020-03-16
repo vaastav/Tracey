@@ -1,0 +1,21 @@
+\section{Evaluation}
+
+We have identified three metrics we will evaluate for our tool. They are generation speed, summarization ability,
+and preservation of important information. These metrics were chosen to make sure our tool will be able to provide 
+important data to users within a reasonable time. 
+
+We will measure generation speed by creating summaries of groups of traces that vary in size. We will compare the time it took 
+to generate the summaries to the number of traces in each group. For summaries generated from natural language queries the time
+should take no longer than a few seconds. For daily reports, these will likely be generated overnight and could take longer, 
+up to a few minutes. 
+
+We will measure the summarization ability of our tool by comparing lengths of summaries to the number of traces that were involved
+their generation. As the number of traces increase, the lengths of the summaries should not grow exponentially or linearly. We want the 
+reports to be no longer than a page for large numbers of traces and a paragraph for smaller nubmers. Additionally, we will perform measures 
+of redundancy to ensure we are not repeating information in our summaries, making them artifically long. We will obtain these measures using
+a unique n-gram ratio.
+
+Finally we will measure preservation of important information by manually identifying critical data in the traces, and counting how many
+appear in summarizations. This evaluation will be applied to traces of varying sizes. We expect to preserve the majority of critical 
+information for daily reports; however, understand that as the number of traces increase we could lose some if we choose to cap the 
+summary size. 
