@@ -4,7 +4,7 @@ We have 2 datasets that we will be visualizing using TraViz.
 The first dataset is called HDFS and contains the \textbf{collection of traces} and \textbf{collection of processes}
 from a Hadoop file system used for distributed storage 
 and big data processing and the \textbf{corresponding source code}.
-The second dataset is called socialNetwork and was obtained from the DeathStarBench open-source benchmark for cloud microservices~\cite{gan2019open}.
+The second dataset is called socialNetwork~\cite{anand2019deathstarbenchtraces} and was obtained from the DeathStarBench open-source benchmark for cloud microservices~\cite{gan2019open}.
 It contains the \textbf{collection of traces}, \textbf{collection of processes} as well as the corresponding \textbf{source code}.
 Each distributed system comprises of multiple services that run on machines as different processes.
 The HDFS dataset has a total of 71,001 traces and 18 processes.
@@ -86,4 +86,4 @@ For the HDFS dataset, the number of events per trace range from 0 to 9697 with a
 Events are important things that happen in a system, such as acquiring a lock, sending a request to another server,
 or performing an update. These events are defined by the developer as instrumentation in the source code.
 Events can be considered as anything a developer thinks is useful enough to log. The attributes of an event are shown
-in Table ~\ref{tab:event}.
+in Table~\ref{tab:event}.

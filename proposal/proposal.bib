@@ -4,34 +4,510 @@
     note = {Accessed: 2019-11-04}
 }
 
-@misc{Jaeger,
-    title = {Jaeger - Distributed Tracing System},
-    howpublished = {\url{https://www.jaegertracing.io/}},
-    note = {Accessed: 2019-11-04}
+@TechReport{sigelman2010dapper,
+  author      = {Sigelman, Benjamin H and Barroso, Luiz Andre and Burrows, Mike and Stephenson, Pat and Plakal, Manoj and Beaver, Donald and Jaspan, Saul and Shanbhag, Chandan},
+  title       = {{Dapper, a Large-Scale Distributed Systems Tracing Infrastructure}},
+  institution = {Google},
+  year        = {2010},
+  type        = {{Technical Report}},
 }
 
-@misc{LightStep,
-    title = {LightStep},
-    howpublished = {\url{https://lightstep.com/}},
-    note = {Accessed: 2019-11-04}
+@article{jiang2013survey,
+  title={A survey of frequent subgraph mining algorithms},
+  author={Jiang, Chuntao and Coenen, Frans and Zito, Michele},
+  journal={The Knowledge Engineering Review},
+  year={2013},
+  publisher={Cambridge University Press}
 }
 
-@inproceedings{gan2019open,
-  title={An Open-Source Benchmark Suite for Microservices and Their Hardware-Software Implications for Cloud \& Edge Systems},
+@article{bunke1997relation,
+  title={On a relation between graph edit distance and maximum common subgraph},
+  author={Bunke, Horst},
+  journal={Pattern Recognition Letters},
+  year={1997},
+  publisher={Elsevier}
+}
+
+@article{vishwanathan2010graph,
+  title={Graph kernels},
+  author={Vishwanathan, SVN and Schraudolph, Nicol N and Kondor, Risi and Borgwardt, Karsten M},
+  journal={JMLR},
+  volume={99},
+  pages={1201--1242},
+  year={2010},
+  publisher={MIT Press}
+}
+
+@inproceedings{doc2vec,
+  title={{Distributed Representations of Sentences and Documents}},
+  author={Le, Quoc and Mikolov, Tomas},
+  booktitle={31st International Conference on Machine Learning (ICML '14)},
+}
+
+@inproceedings{word2vec,
+  title={{Distributed Representations of Words and Phrases and their Compositionality}},
+  author={Mikolov, Tomas and Sutskever, Ilya and Chen, Kai and Corrado, Greg S and Dean, Jeff},
+  booktitle={27th Conference on Neural Information Processing Systems (NIPS '13)},
+}
+
+@InProceedings{barham2004using,
+  author    = {Barham, Paul and Donnelly, Austin and Isaacs, Rebecca and Mortier, Richard},
+  title     = {{Using Magpie for Request Extraction and Workload Modelling}},
+  booktitle = {6th USENIX Symposium on Operating Systems Design and Implementation (OSDI '04)},
+}
+
+@InProceedings{mace2018universal,
+  title={{Universal Context Propagation for Distributed System Instrumentation}},
+  booktitle = {13th ACM European Conference on Computer Systems (EuroSys '18)},
+  author = {Mace, Jonathan and Fonseca, Rodrigo}
+}
+
+@InProceedings{kaldor2017canopy,
+  author        = {Kaldor, Jonathan and Mace, Jonathan and Bejda, Micha\l{} and Gao, Edison and Kuropatwa, Wiktor and O'Neill, Joe and Ong, Kian Win and Schaller, Bill and Shan, Pingjia and Viscomi, Brendan and Vekataraman, Vinod and Veeraraghavan, Kaushik and Song, Yee Jiun},
+  title         = {{Canopy: An End-to-End Performance Tracing And Analysis System}},
+  booktitle     = {26th ACM Symposium on Operating Systems Principles (SOSP '17)},
+}
+
+@InProceedings{mace2015pivot,
+  author    = {Mace, Jonathan and Roelke, Ryan and Fonseca, Rodrigo},
+  title     = {{Pivot Tracing: Dynamic Causal Monitoring for Distributed Systems}},
+  booktitle = {25th ACM Symposium on Operating Systems Principles (SOSP '15)},
+}
+
+@inproceedings{lascasas2018weighted,
+  title={{Weighted Sampling of Execution Traces: Capturing More Needles and Less Hay}},
+  author={Las-Casas, Pedro and Mace, Jonathan and Guedes, Dorgival and Fonseca, Rodrigo},
+  booktitle={10th ACM Symposium on Cloud Computing (SOCC '18)},
+}
+
+
+@InProceedings{fonseca2007xtrace,
+  author    = {Fonseca, Rodrigo and Porter, George and Katz, Randy H and Shenker, Scott and Stoica, Ion},
+  title     = {{X-Trace: A Pervasive Network Tracing Framework}},
+  booktitle = {4th USENIX Symposium on Networked Systems Design and Implementation (NSDI '07)},
+}
+
+@Misc{lightstepSnapshots,
+  title        = {{Snapshots: Detailed System Behavior, Always Saved and Always Shareable}},
+  author       = {Lightstep},
+  howpublished = {(October 2018). Retrieved June 2019 from \url{https://lightstep.com/blog/snapshots-detailed-system-behavior-saved-shareable/}},
+}
+
+@Misc{lightstep,
+  title = {{LightStep: Simple Observability for Deep Systems}},
+  author = {LightStep},
+  howpublished = {Retrieved March 2020 from \url{https://lightstep.com/}}
+}
+
+@Misc{jaeger,
+  title         = {{Jaeger: Open Source, End-to-End Distributed Tracing}},
+  author = {Jaeger},
+  howpublished  = {Retrieved June 2019 from \url{https://www.jaegertracing.io/}},
+}
+
+@Misc{opentracing,
+  title        = {{OpenTracing}},
+  author       = {OpenTracing},
+  howpublished = {Retrieved January 2017 from \url{http://opentracing.io/}},
+}
+
+@Misc{scribe,
+  title        = {{Facebook's Scribe technology now open source}},
+  author       = {Robert Johnson},
+  howpublished = {Retrieved August 2017 from \url{https://www.facebook.com/note.php?note_id=32008268919}},
+}
+
+@Misc{kafka,
+  title = {{Kafka: A Distributed Streaming Platform}},
+  author = {Apache},
+  howpublished = {Retrieved June 2019 from \url{https://kafka.apache.org/}},
+}
+
+@Misc{zipkin,
+  title        = {{Zipkin}},
+  author       = {Twitter},
+  howpublished = {Retrieved July 2017 from \url{http://zipkin.io/}},
+}
+
+@Misc{anand2019deathstarbenchtraces,
+  title = {{X-Trace trace dataset for DeathStarBench}},
+  author = {Anand, Vaastav and Mace, Jonathan},
+  year = {2019},
+  howpublished = {Retrieved October 2019 from \url{https://gitlab.mpi-sws.org/cld/trace-datasets/deathstarbench\_traces/tree/master/socialNetwork}}
+}
+
+@Misc{pinterestaggregate,
+  title = {{Analyzing distributed trace data}},
+  author = {Herr, Brittany and Abbas, Naoman},
+  year = {2017},
+  howpublished = {Retrieved March 2020 from \url{https://medium.com/pinterest-engineering/analyzing-distributed-trace-data-6aae58919949}}
+}
+
+@Misc{pintrace,
+  title = {{Distributed tracing at Pinteres with new open source tools}},
+  author = {Karumuri, Suman},
+  year = {2017},
+  howpublished = {Retrieved March 2020 from \url{https://medium.com/pinterest-engineering/analyzing-distributed-trace-data-6aae58919949}}
+}
+
+@InProceedings{sambasivan2011diagnosing,
+  author    = {Sambasivan, Raja R and Zheng, Alice X and De Rosa, Michael and Krevat, Elie and Whitman, Spencer and Stroucken, Michael and Wang, William and Xu, Lianghong and Ganger, Gregory R},
+  title     = {{Diagnosing Performance Changes by Comparing Request Flows}},
+  booktitle = {8th USENIX Symposium on Networked Systems Design and Implementation (NSDI '11)},
+}
+
+@InProceedings{sambasivan2016principled,
+  author    = {Sambasivan, Raja R and Shafer, Ilari and Mace, Jonathan and Sigelman, Benjamin H and Fonseca, Rodrigo and Ganger, Gregory R},
+  title     = {{Principled Workflow-Centric Tracing of Distributed Systems}},
+  booktitle = {7th ACM Symposium on Cloud Computing (SOCC '16)},
+}
+
+@MastersThesis{leavitt2014end,
+  author = {Leavitt, Jonathan},
+  title  = {{End-to-End Tracing Models: Analysis and Unification}},
+  school = {Brown University},
+  year   = {2014},
+  type   = {{B.Sc. Thesis}},
+}
+
+@Article{lamport1978time,
+  author  = {Lamport, Leslie},
+  title   = {{Time, Clocks, and the Ordering of Events in a Distributed System}},
+  journal = {Communications of the ACM},
+  year    = {1978},
+  volume  = {21},
+  number  = {7},
+  pages   = {558--565},
+}
+
+@inproceedings{kasick2010black,
+  title={{Black-Box Problem Diagnosis in Parallel File Systems}},
+  author={Kasick, Michael P and Tan, Jiaqi and Gandhi, Rajeev and Narasimhan, Priya},
+  booktitle={8th USENIX Conference on File and Storage Technologies (FAST '10)},
+}
+
+@inproceedings{xu2009detecting,
+  title={{Detecting Large-Scale System Problems by Mining Console Logs}},
+  author={Xu, Wei and Huang, Ling and Fox, Armando and Patterson, David and Jordan, Michael I},
+  booktitle={22nd ACM Symposium on Operating Systems Principles (SOSP '09)},
+}
+
+@inproceedings{nagaraj2012structured,
+  title={{Structured Comparative Analysis of System Logs to Diagnose Performance Problems}},
+  author={Nagaraj, Karthik and Killian, Charles and Neville, Jennifer},
+  booktitle={9th USENIX Conference on Networked Systems Design and Implementation (NSDI '12)},
+}
+
+@InProceedings{chow2014mystery,
+  author    = {Chow, Michael and Meisner, David and Flinn, Jason and Peek, Daniel and Wenisch, Thomas F},
+  title     = {{The Mystery Machine: End-to-end Performance Analysis of Large-scale Internet Services}},
+  booktitle = {11th USENIX Symposium on Operating Systems Design and Implementation (OSDI '14)},
+}
+
+@inproceedings{lou2010mining,
+  title={{Mining Invariants from Console Logs for System Problem Detection}},
+  author={Lou, Jian-Guang and Fu, Qiang and Yang, Shengqi and Xu, Ye and Li, Jiang},
+  booktitle={USENIX Annual Technical Conference (ATC '10)},
+}
+
+@inproceedings{gan2019seer,
+  title={{Seer: Leveraging Big Data to Navigate the Complexity of Performance Debugging in Cloud Microservices}},
+  author={Gan, Yu and Zhang, Yanqi and Hu, Kelvin and Cheng, Dailun and He, Yuan and Pancholi, Meghna and Delimitrou, Christina},
+  booktitle={24th ACM International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS '19)},
+}
+
+@inproceedings{gan2019deathstar,
+  title={{An Open-Source Benchmark Suite for Microservices and Their Hardware-Software Implications for Cloud and Edge Systems}},
   author={Gan, Yu and Zhang, Yanqi and Cheng, Dailun and Shetty, Ankitha and Rathi, Priyal and Katarki, Nayan and Bruno, Ariana and Hu, Justin and Ritchken, Brian and Jackson, Brendon and others},
-  booktitle={Proceedings of the Twenty-Fourth International Conference on Architectural Support for Programming Languages and Operating Systems},
-  pages={3--18},
-  year={2019},
-  organization={ACM}
+  booktitle={24th ACM International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS '19)},
 }
 
-@article{lamport1978time,
-  title={Time, clocks, and the ordering of events in a distributed system},
-  author={Lamport, Leslie},
-  journal={Communications of the ACM},
-  volume={21},
-  number={7},
-  pages={558--565},
-  year={1978},
-  publisher={ACM}
+@inproceedings{zhao2017log20,
+  title={{Log20: Fully Automated Optimal Placement of Log Printing Statements under Specified Overhead Threshold}},
+  author={Zhao, Xu and Rodrigues, Kirk and Luo, Yu and Stumm, Michael and Yuan, Ding and Zhou, Yuanyuan},
+  booktitle={26th ACM Symposium on Operating Systems Principles (SOSP '17)},
+}
+
+@inproceedings{zhao2016non,
+  title={{Non-Instrusive Performance Profiling for Entire Software Stacks based on the Flow Reconstruction Principle}},
+  author={Zhao, Xu and Rodrigues, Kirk and Luo, Yu and Yuan, Ding and Stumm, Michael},
+  booktitle={12th USENIX Symposium on Operating Systems Design and Implementation (OSDI '16)},
+}
+
+@InProceedings{chen2004path,
+  author    = {Chen, Mike Y and Accardi, Anthony and Kiciman, Emre and Patterson, David A and Fox, Armando and Brewer, Eric A},
+  title     = {{Path-Based Failure and Evolution Management}},
+  booktitle = {1st USENIX Symposium on Networked Systems Design and Implementation (NSDI '04)},
+}
+
+@InProceedings{zhao2014lprof,
+  author    = {Zhao, Xu and Zhang, Yongle and Lion, David and Faizan, Muhammad and Luo, Yu and Yuan, Ding and Stumm, Michael},
+  title     = {{lprof: A Non-intrusive Request Flow Profiler for Distributed Systems}},
+  booktitle = {11th USENIX Symposium on Operating Systems Design and Implementation (OSDI '14)},
+}
+
+@InProceedings{mann2011modeling,
+  author    = {Mann, Gideon and Sandler, Mark and Krushevskaja, Darja and Guha, Sudipto and Even-Dar, Eyal},
+  title     = {{Modeling the Parallel Execution of Black-Box Services}},
+  booktitle = {3rd USENIX Workshop on Hot Topics in Cloud Computing (HotCloud '11)},
+}
+
+@InProceedings{ostrowski2011diagnosing,
+  author    = {Ostrowski, Krzysztof and Mann, Gideon and Sandler, Mark},
+  title     = {{Diagnosing Latency in Multi-Tier Black-Box Services}},
+  booktitle = {5th Workshop on Large Scale Distributed Systems and Middleware (LADIS '11)},
+}
+
+@article{bengio2003neural,
+  title={{A Neural Probabilistic Language Model}},
+  author={Bengio, Yoshua and Ducharme, R{\'e}jean and Vincent, Pascal and Jauvin, Christian},
+  journal={Journal of Machine Learning Research},
+  volume={3},
+  number={Feb},
+  pages={1137--1155},
+  year={2003}
+}
+
+@InProceedings{hdfs,
+  author  = {Shvachko, Konstantin and Kuang, Hairong and Radia, Sanjay and Chansler, Robert},
+  title   = {{The Hadoop Distributed File System}},
+  journal = {26th IEEE Symposium on Mass Storage Systems and Technologies (MSST '10)},
+}
+
+@InProceedings{spark,
+  author    = {Zaharia, Matei and Chowdhury, Mosharaf and Das, Tathagata and Dave, Ankur and Ma, Justin and McCauley, Murphy and Franklin, Michael J and Shenker, Scott and Stoica, Ion},
+  title     = {{Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing}},
+  booktitle = {9th USENIX Symposium on Networked Systems Design and Implementation (NSDI '12)},
+}
+
+@InProceedings{yarn,
+  author    = {Vavilapalli, Vinod Kumar and Murthy, Arun C. and Douglas, Chris and Agarwal, Sharad and Konar, Mahadev and Evans, Robert and Graves, Thomas and Lowe, Jason and Shah, Hitesh and Seth, Siddharth and Saha, Bikas and Curino, Carlo and O'Malley, Owen and Radia, Sanjay and Reed, Benjamin and Baldeschwieler, Eric},
+  title     = {{Apache Hadoop YARN: Yet Another Resource Negotiator}},
+  booktitle = {4th ACM Symposium on Cloud Computing (SoCC '13)},
+}
+
+
+@MastersThesis{mace2013revisiting,
+  author = {Jonathan Mace},
+  title  = {{Revisiting End-to-End Trace Comparison with Graph Kernels}},
+  school = {Brown University},
+  year   = {2013},
+  type   = {{M.Sc. Project}},
+}
+
+@InProceedings{wu2019zeno,
+  title={{Zeno: Diagnosing Performance Problems with Temporal Provenance}},
+  author={Wu, Yang and Chen, Ang and Phan, Linh Thi Xuan},
+  booktitle={16th USENIX Conference on Networked Systems Design and Implementation (NSDI '19)},
+}
+
+
+@InProceedings{thereska2006stardust,
+  author    = {Thereska, Eno and Salmon, Brandon and Strunk, John and Wachs, Matthew and Abd-El-Malek, Michael and Lopez, Julio and Ganger, Gregory R},
+  title     = {{Stardust: Tracking Activity in a Distributed Storage System}},
+  booktitle = {2006 ACM International Conference on Measurement and Modeling of Computer Systems (SIGMETRICS '06)},
+}
+
+
+
+@InProceedings{chanda2007whodunit,
+  author    = {Chanda, Anupam and Cox, Alan L and Zwaenepoel, Willy},
+  title     = {{Whodunit: Transactional Profiling for Multi-Tier Applications}},
+  booktitle = {2nd ACM European Conference on Computer Systems (EuroSys '07)},
+}
+
+@inproceedings{tian2018continuum,
+  title={{Continuum: A Platform for Cost-Aware, Low-Latency Continual Learning}},
+  author={Tian, Huangshi and Yu, Minchen and Wang, Wei},
+  booktitle={10th ACM Symposium on Cloud Computing (SOCC '18)},
+}
+
+@inproceedings{ardelean2018performance,
+  title={{Performance Analysis of Cloud Applications}},
+  author={Ardelean, Dan and Diwan, Amer and Erdman, Chandra},
+  booktitle={15th USENIX Symposium on Networked Systems Design and Implementation (NSDI '18)},
+}
+
+@inproceedings{xu2017neural,
+  title={{Neural Network-based Graph Embedding for Cross-Platform Binary Code Similarity Detection}},
+  author={Xu, Xiaojun and Liu, Chang and Feng, Qian and Yin, Heng and Song, Le and Song, Dawn},
+  booktitle={24th ACM Conference on Computer and Communications Security (CCS '17)},
+}
+
+@article{sambasivan2013visualizing,
+  title={Visualizing request-flow comparison to aid performance diagnosis in distributed systems},
+  author={Sambasivan, Raja R and Shafer, Ilari and Mazurek, Michelle L and Ganger, Gregory R},
+  journal={IEEE transactions on visualization and computer graphics},
+  volume={19},
+  number={12},
+  pages={2466--2475},
+  year={2013},
+  publisher={IEEE}
+}
+
+@inproceedings{las2019sifter,
+  title={Sifter: Scalable Sampling for Distributed Traces, without Feature Engineering},
+  author={Las-Casas, Pedro and Papakerashvili, Giorgi and Anand, Vaastav and Mace, Jonathan},
+  booktitle={Proceedings of the ACM Symposium on Cloud Computing},
+  pages={312--324},
+  year={2019}
+}
+
+
+@misc{lightstepcritical,
+  title={LightStep: View Traces-Seeing the Critical Path},
+  author={LightStep},
+  howpublished={Retrieved March 2020 from \url{https://docs.lightstep.com/docs/view-traces}}
+}
+
+@book{sridharan2018distributed,
+  title={Distributed Systems Observability},
+  author={Sridharan, Cindy},
+  year={2018},
+  publisher={O'Reilly Media, Incorporated}
+}
+
+@misc{sridharantraceviewwrong,
+  title={},
+  author={Sridharan, Cindy},
+  year={2019},
+  howpublished={Retrieved February 2020 from \url{https://medium.com/@copyconstruct/distributed-tracing-weve-been-doing-it-wrong-39fc92a857df}}
+}
+
+@misc{shkurographdiffviz,
+  title={A Picture is Worth a 1,000 Traces},
+  author={Flanders, Steve and Shkuro, Yuri},
+  year={2019},
+  howpublished={Observability Practitioners Summit,KubeCon NA 2019 \url{https://www.shkuro.com/talks/2019-11-18-a-picture-is-worth-a-thousand-traces/}}
+}
+
+@article{clarkson2010hyperproperties,
+  title={Hyperproperties},
+  author={Clarkson, Michael R and Schneider, Fred B},
+  journal={Journal of Computer Security},
+  volume={18},
+  number={6},
+  pages={1157--1210},
+  year={2010},
+  publisher={IOS Press}
+}
+
+@inproceedings{wang2012vscope,
+  title={VScope: middleware for troubleshooting time-sensitive data center applications},
+  author={Wang, Chengwei and Rayan, Infantdani Abel and Eisenhauer, Greg and Schwan, Karsten and Talwar, Vanish and Wolf, Matthew and Huneycutt, Chad},
+  booktitle={ACM/IFIP/USENIX International Conference on Distributed Systems Platforms and Open Distributed Processing},
+  pages={121--141},
+  year={2012},
+  organization={Springer}
+}
+
+@inproceedings{kavulya2012draco,
+  title={Draco: Statistical diagnosis of chronic problems in large distributed systems},
+  author={Kavulya, Soila P and Daniels, Scott and Joshi, Kaustubh and Hiltunen, Matti and Gandhi, Rajeev and Narasimhan, Priya},
+  booktitle={IEEE/IFIP International Conference on Dependable Systems and Networks (DSN 2012)},
+  pages={1--12},
+  year={2012},
+  organization={IEEE}
+}
+
+@article{bailis2016macrobase,
+  title={Macrobase: Analytic monitoring for the internet of things},
+  author={Bailis, Peter and Gan, Edward and Madden, Samuel and Narayanan, Deepak and Rong, Kexin and Suri, Sahaana},
+  journal={arXiv preprint arXiv:1603.00567},
+  volume={7},
+  year={2016}
+}
+
+@inproceedings{ousterhout2015making,
+  title={Making sense of performance in data analytics frameworks},
+  author={Ousterhout, Kay and Rasti, Ryan and Ratnasamy, Sylvia and Shenker, Scott and Chun, Byung-Gon},
+  booktitle={12th $\{$USENIX$\}$ Symposium on Networked Systems Design and Implementation ($\{$NSDI$\}$ 15)},
+  pages={293--307},
+  year={2015}
+}
+
+@article{aguilera2003performance,
+  title={Performance debugging for distributed systems of black boxes},
+  author={Aguilera, Marcos K and Mogul, Jeffrey C and Wiener, Janet L and Reynolds, Patrick and Muthitacharoen, Athicha},
+  journal={ACM SIGOPS Operating Systems Review},
+  volume={37},
+  number={5},
+  pages={74--89},
+  year={2003},
+  publisher={ACM New York, NY, USA}
+}
+
+@inproceedings{barham2003magpie,
+  title={Magpie: Online Modelling and Performance-aware Systems.},
+  author={Barham, Paul and Isaacs, Rebecca and Mortier, Richard and Narayanan, Dushyanth},
+  booktitle={HotOS},
+  pages={85--90},
+  year={2003}
+}
+
+@inproceedings{chen2002pinpoint,
+  title={Pinpoint: Problem determination in large, dynamic internet services},
+  author={Chen, Mike Y and Kiciman, Emre and Fratkin, Eugene and Fox, Armando and Brewer, Eric},
+  booktitle={Proceedings International Conference on Dependable Systems and Networks},
+  pages={595--604},
+  year={2002},
+  organization={IEEE}
+}
+
+@book{munzner2014vad,
+title={Visualization Analysis and Design},
+author={Munzner, Tamara},
+year={2014},
+publisher={CRC Press}
+}
+
+@book{beyer2016site,
+  title={Site Reliability Engineering: How Google Runs Production Systems},
+  author={Beyer, Betsy and Jones, Chris and Petoff, Jennifer and Murphy, Niall Richard},
+  year={2016},
+  publisher={" O'Reilly Media, Inc."}
+}
+
+@Misc{zipkintwitter,
+  title={Distributed Systems Tracing with Zipkin at Twitter},
+  author={Aniszczyk, Chris},
+  year={2012},
+  howpublished={Retrieved March 2020 from \url{https://blog.twitter.com/engineering/en_us/a/2012/distributed-systems-tracing-with-zipkin.html}}
+}
+
+@Misc{netflixtracing,
+  title={Lessons from Building Observability Tools at Netflix},
+  author={Netflix Technology Blog},
+  year={2018},
+  howpublished={Retrieved March 2020 from \url{https://netflixtechblog.com/lessons-from-building-observability-tools-at-netflix-7cfafed6ab17}}
+}
+
+@Misc{opentelemetry,
+  title={OpenCensus and OpenTracing are now OpenTelemetry},
+  author={Flanders, Steve},
+  year={2019},
+  howpublished={Retrieved March 2020 from \url{https://omnition.io/blog/opencensus-and-opentracing-are-now-opentelemetry/}}
+}
+
+@article{macewe,
+  title={We are Losing Track: a Case for Causal Metadata in Distributed Systems},
+  author={Mace, Rodrigo Fonseca Jonathan}
+}
+
+@Misc{uberuservice,
+  title={Uber: Service-Oriented Architecture: Scaling the Uber Engineering Codebase As We Grow},
+  author={Haddad, Einas},
+  howpublished={Retrieved March 2020 from \url{https://eng.uber.com/service-oriented-architecture/}}
+}
+
+@Misc{netflixuservice,
+  title={Adopting Microservices at Netflix: Lessons for Architectural Design},
+  author={Nginx Blog},
+  howpublished={Retrieved March 2020 from \url{https://www.nginx.com/blog/microservices-at-netflix-architectural-best-practices/}}
+}
+
+@Misc{amazonuservice,
+  title={Amazon Microsevrices},
+  author={Amazon},
+  howpublished={Retrieved March 2020 from \url{https://aws.amazon.com/microservices/}}
 }

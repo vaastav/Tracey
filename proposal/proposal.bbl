@@ -1,32 +1,82 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
-\bibitem{Jaeger}
-Jaeger - distributed tracing system.
-\newblock \url{https://www.jaegertracing.io/}.
-\newblock Accessed: 2019-11-04.
+\bibitem{anand2019deathstarbenchtraces}
+V.~Anand and J.~Mace.
+\newblock {X-Trace trace dataset for DeathStarBench}.
+\newblock Retrieved October 2019 from
+  \url{https://gitlab.mpi-sws.org/cld/trace-datasets/deathstarbench\_traces/tree/master/socialNetwork},
+  2019.
 
-\bibitem{LightStep}
-Lightstep.
-\newblock \url{https://lightstep.com/}.
-\newblock Accessed: 2019-11-04.
+\bibitem{netflixtracing}
+N.~T. Blog.
+\newblock Lessons from building observability tools at netflix.
+\newblock Retrieved March 2020 from
+  \url{https://netflixtechblog.com/lessons-from-building-observability-tools-at-netflix-7cfafed6ab17},
+  2018.
 
-\bibitem{ShiViz}
-Shiviz.
-\newblock \url{https://bestchai.bitbucket.io/shiviz/}.
-\newblock Accessed: 2019-11-04.
+\bibitem{opentelemetry}
+S.~Flanders.
+\newblock Opencensus and opentracing are now opentelemetry.
+\newblock Retrieved March 2020 from
+  \url{https://omnition.io/blog/opencensus-and-opentracing-are-now-opentelemetry/},
+  2019.
 
-\bibitem{gan2019open}
-Y.~Gan, Y.~Zhang, D.~Cheng, A.~Shetty, P.~Rathi, N.~Katarki, A.~Bruno, J.~Hu,
-  B.~Ritchken, B.~Jackson, et~al.
-\newblock An open-source benchmark suite for microservices and their
-  hardware-software implications for cloud \& edge systems.
-\newblock In {\em Proceedings of the Twenty-Fourth International Conference on
-  Architectural Support for Programming Languages and Operating Systems}, pages
-  3--18. ACM, 2019.
+\bibitem{fonseca2007xtrace}
+R.~Fonseca, G.~Porter, R.~H. Katz, S.~Shenker, and I.~Stoica.
+\newblock {X-Trace: A Pervasive Network Tracing Framework}.
+\newblock In {\em 4th USENIX Symposium on Networked Systems Design and
+  Implementation (NSDI '07)}.
+
+\bibitem{jaeger}
+Jaeger.
+\newblock {Jaeger: Open Source, End-to-End Distributed Tracing}.
+\newblock Retrieved June 2019 from \url{https://www.jaegertracing.io/}.
+
+\bibitem{kaldor2017canopy}
+J.~Kaldor, J.~Mace, M.~Bejda, E.~Gao, W.~Kuropatwa, J.~O'Neill, K.~W. Ong,
+  B.~Schaller, P.~Shan, B.~Viscomi, V.~Vekataraman, K.~Veeraraghavan, and Y.~J.
+  Song.
+\newblock {Canopy: An End-to-End Performance Tracing And Analysis System}.
+\newblock In {\em 26th ACM Symposium on Operating Systems Principles (SOSP
+  '17)}.
 
 \bibitem{lamport1978time}
 L.~Lamport.
-\newblock Time, clocks, and the ordering of events in a distributed system.
+\newblock {Time, Clocks, and the Ordering of Events in a Distributed System}.
 \newblock {\em Communications of the ACM}, 21(7):558--565, 1978.
+
+\bibitem{lightstep}
+LightStep.
+\newblock {LightStep: Simple Observability for Deep Systems}.
+\newblock Retrieved March 2020 from \url{https://lightstep.com/}.
+
+\bibitem{mace2018universal}
+J.~Mace and R.~Fonseca.
+\newblock {Universal Context Propagation for Distributed System
+  Instrumentation}.
+\newblock In {\em 13th ACM European Conference on Computer Systems (EuroSys
+  '18)}.
+
+\bibitem{mace2015pivot}
+J.~Mace, R.~Roelke, and R.~Fonseca.
+\newblock {Pivot Tracing: Dynamic Causal Monitoring for Distributed Systems}.
+\newblock In {\em 25th ACM Symposium on Operating Systems Principles (SOSP
+  '15)}.
+
+\bibitem{macewe}
+R.~F.~J. Mace.
+\newblock We are losing track: a case for causal metadata in distributed
+  systems.
+
+\bibitem{sigelman2010dapper}
+B.~H. Sigelman, L.~A. Barroso, M.~Burrows, P.~Stephenson, M.~Plakal, D.~Beaver,
+  S.~Jaspan, and C.~Shanbhag.
+\newblock {Dapper, a Large-Scale Distributed Systems Tracing Infrastructure}.
+\newblock {Technical Report}, Google, 2010.
+
+\bibitem{zipkin}
+Twitter.
+\newblock {Zipkin}.
+\newblock Retrieved July 2017 from \url{http://zipkin.io/}.
 
 \end{thebibliography}
