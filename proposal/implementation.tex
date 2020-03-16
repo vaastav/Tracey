@@ -1,5 +1,6 @@
 \section{Implementation Approach}
 
-Our visualization tool will be a webapp. We will host a backend written in Python that 
-will serve requests from a client. The frontend will be written in javascript. We will use D3 to manipulate the data served
-by our backend and to create the visualizations necessary to fulfill our comparison tasks.
+Our tool for generating summaries will be a simple webapp written in Python that provides
+an interface for generating summaries of tracing data. The trace data will be stored in
+a mysql database which would interact with the Python tool to run various queries on the data.
+We will most likely use the ``nltk'' library for various tasks in developing our summarization tool.
