@@ -8,14 +8,27 @@ The meteoric rise of cloud computing in the past decade has only increased our d
 distributed systems in our lives.
 
 Tasks like monitoring, root cause analysis, performance comprehension require techniques that cut across component,
-system, and machine boundaries to collect, correlate, and integrate data. Distributed Tracing is one such cross-cutting technique
-that correlates events across the system to a specific request by propagating a unique context per system with the request.
+system, and machine boundaries to collect, correlate, and integrate data. In the past decade, distributed tracing has emerged as an effective way to gain visibility across distributed systems~\cite{mace2015pivot,mace2018universal,fonseca2007xtrace}.  
+Today distributed tracing frameworks are deployed at all major internet companies~\cite{kaldor2017canopy,sigelman2010dapper,netflixtracing}; 
+notable open-source examples include OpenTelemetry~\cite{opentelemetry}, Jaeger~\cite{jaeger}, and Zipkin~\cite{zipkin}; and 
+observability-focused companies offer platforms centered on analysis of traces~\cite{lightstep}.
+
+Distributed tracing tools arose out of a need to understand the behavior of \emph{individual requests}: identifying the specific services 
+invoked by a request, diagnosing problematic requests, and debugging correctness issues~\cite{fonseca2007xtrace,sigelman2010dapper,macewe}.
+As a result, each trace only tells the story of a single request.
 A trace represents the path of one request through the system and contains information such as the timing of requests, 
 the events executed, and the nodes where these events were executed. Moreover, traces can be used
 to identify slow requests and understand the difference between request executions. 
 
-In this project, we propose to create a visualization tool that uses data from traces to succinctly represent the structure 
-and performance of a distributed system. Our tool will allow users to compare the path taken by a group
-of requests to the path taken by other requests. We believe that a visualization tool that can represent the
-structure of a group of traces, while also visually encoding relevant performance information, will make
-it easier for the developers to triage root causes of performance bugs.
+However, as distributed tracing is designed for production distributed systems, a large volume of data
+is produced on a daily basis. It is humanly impossible to manually analyze each trace and draw inference
+about the system as a collective. Current, analysis tools, primarily focus on visualzing a single trace
+and provide little help to the user for analyzing a large amount of data. We intend to remove this burden
+by automatically generating a daily summary that presents the developers with the daily highlights
+across the trace data.
+
+In this project, we propose to create an NLP tool that uses data from traces to succinctly summarize
+the traces that were generated in a given day to provide an informative summary to the developer
+in-charge of maintaining the health and performance of the system. We believe, generating a daily summary
+would alleviate some burden from the developers in terms of the sheer volume of data they need to analyze
+as well as potentially provide hints regarding the sources of performance or correctness issues.
