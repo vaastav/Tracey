@@ -1,14 +1,16 @@
 \section{Task}
 
-We have identified a few tasks that we our tool to be able to provide. These include summary tasks over all data for a specific time,
-as well as analyzing specific traces based on input. We will use techniques such as textual entailment and motif mining to help summarize the traces. 
+We have identified a few tasks that our tool to be able to provide. These include summary tasks over all data for a specific time,
+as well as analyzing specific traces based on input. 
 
 Our first task is a daily report generated to give a user an idea of what occured in a distributed system over the course 
 of the previous twenty-four hours. The input data for this will be multiple traces across a period of time. This will be 
 based on a mix of template-based generation and summarization. The templates will include information such as number of traces
 and what types of traces they were. The summaries will include information such as a trace of a particular type behaving differently
-from the rest. This report will be about a paragraph to a page long. 
+from the rest. We will use techniques such as textual entailment and motif mining to help summarize the traces. This report
+will be about a paragraph to a page long. Our next task may be a stretch goal, as our focus will first be on making documents from templates
+and then summarizing these documents.
 
-Our other task will be a natural language interface to the trace data. Users will be able to write English sentences that will be
+Our other task will be a natural language interface to the trace data. Through this interface, users will be able to write English sentences that will be
 translated into SQL queries. These results of these queries will be translated back into English for the user to read. Some of the 
-queries that users could ask could be generating summary statistics of a certain type of trace, or a comparison of two traces.
+queries that users could ask could be generating summary statistics of a certain type of trace, or a comparison of two traces. 
