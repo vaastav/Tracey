@@ -1,7 +1,7 @@
 from flask import Flask, request
 import json
 import sys
-import scipy.stats
+import scipy.stats as stats
 from networkx import DiGraph
 from networkx.algorithms import is_directed_acyclic_graph
 from networkx.algorithms.traversal.edgedfs import edge_dfs
@@ -24,8 +24,7 @@ def get_tasks(trace_id):
     return tasks
 
 def generate_trace_summary(events, tasks):
-    summary = ""
-    anomalous_events_set = {}
+    summary = "Done boss!"
 
     percentile_scores = {}
     concurrent_tasks = {}
@@ -47,6 +46,7 @@ def generate_trace_summary(events, tasks):
 
     eventInfo = {}
     eventGraph = DiGraph()
+    anomalous_events_set = set()
     # Group events by task, and 
     # Then shomehow concatenate the summaries from the tasks based on the graph structure
     for event in events:
@@ -82,9 +82,9 @@ def generate_trace_summary(events, tasks):
 
     return summary
 
-@api.route("/summary/", methods=['GET'])
-def summary():
-    trace_id = request.args.get("query")
+@api.route("/summary/<string:trace_id>", methods=['GET'])
+def summary(trace_id):
+    print("Generating summary for", trace_id)
     # Get list of events for this trace
     events = get_events(trace_id)
     # Get list of tasks for this trace
