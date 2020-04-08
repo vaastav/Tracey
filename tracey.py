@@ -93,6 +93,7 @@ def generate_trace_summary(events, tasks):
 
     # join labels for each task to get summary for each task
     task_summaries = {}
+    task_start_times = {}
     for task, events in task_events.items():
         # Sort the events based on timestamp
         # Then join the event labels for a summary of that task
@@ -105,13 +106,15 @@ def generate_trace_summary(events, tasks):
             if l != '':
                 task_summary += l + ". "
         task_summaries[task] = task_summary
+        task_start_times[task] = sorted_events[0]['HRT']
 
+    print(task_start_times)
     # Join the individual summaries of each task to get
     # the execution summary of the trace
     # TODO: Somehow concatenate the summaries from the tasks based on the graph structure
     # For now concatenate them normally.
     execution_summary = ""
-    for task, summary in task_summaries.items():
+    for task, summary in sorted(task_summaries.items(), key=lambda k : task_start_times[k[0]]):
         execution_summary += task_name[task] + " - " + summary + "\n" 
 
     # Not sure if we need this?
