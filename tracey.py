@@ -69,7 +69,7 @@ def generate_trace_summary(events, tasks):
         eventGraph.add_node(event["EventID"])
         if(event["ParentEventID"] != None):
             for parentID in event["ParentEventID"]:
-                eventGraph.add_edge(''.join(event["ParentEventID"]), event["EventID"])
+                eventGraph.add_edge(parentID, event["EventID"])
         # Get all the anomalous events
         if event["Probability"] < EVENT_PROB_THRESHOLD:
             anomalous_events_set.add(event['EventID'])
@@ -99,9 +99,21 @@ def generate_trace_summary(events, tasks):
         # Then join the event labels for a summary of that task
         events_array = [eventInfo[event] for event in events]
         sorted_events = sorted(events_array, key=lambda k : k['HRT'])
+        task_summary = ''
+        
+        # Grab the first event in the task and check its parent to find the task that created 
+        # the current one, if it has one. If so add to the summary.
+        if(sorted_events[0]["ParentEventID"] is not None):
+            parent_task_id = eventInfo[sorted_events[0]["ParentEventID"][0]]['ProcessName']\
+                + str(eventInfo[sorted_events[0]["ParentEventID"][0]]['ProcessID'])\
+                + str(eventInfo[sorted_events[0]["ParentEventID"][0]]['ThreadID'])
+            task_summary += "Task " + task_name[parent_task_id] + " created task " + task_name[task] + ". "
+            
+
         # Only include events that are user-annotated and not anything from the library.
         labels = [event['Label'] if event['Label'] not in LABEL_BLACKLIST else '' for event in sorted_events]
-        task_summary = ''
+        
+        # Append non empty labels to the summary. 
         for l in labels:
             if l != '':
                 task_summary += l + ". "
@@ -111,16 +123,10 @@ def generate_trace_summary(events, tasks):
     print(task_start_times)
     # Join the individual summaries of each task to get
     # the execution summary of the trace
-    # TODO: Somehow concatenate the summaries from the tasks based on the graph structure
-    # For now concatenate them normally.
     execution_summary = ""
     for task, summary in sorted(task_summaries.items(), key=lambda k : task_start_times[k[0]]):
         execution_summary += task_name[task] + " - " + summary + "\n" 
 
-    # Not sure if we need this?
-    #if(is_directed_acyclic_graph(eventGraph)):
-    #   dfsResult = edge_dfs(eventGraph)
-    #   print(list(dfsResult))
 
     summary = template_summary + "\n\n" + execution_summary
 
