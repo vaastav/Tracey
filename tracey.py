@@ -16,6 +16,25 @@ TASK_PERCENTILE_THRESHOLD_LOW=5.0
 TASK_PERCENTILE_THRESHOLD_HIGH=95.0
 LABEL_BLACKLIST = ["ThreadLocalBaggage::Branch", "ThreadLocalBaggage::Set", "ThreadLocalBaggage::Swap", "ThreadLocalBaggage::Join", "ThreadLocalBaggage::Delete"]
 
+def get_overview(trace_id):
+    global connection
+    cursor = connection.cursor()
+    query = ("SELECT overview.duration, overview.doc, tags.tag FROM overview, tags WHERE overview.trace_id=%s AND tags.trace_id=%s")
+    cursor.execute(query, (trace_id, trace_id))
+    overview = {}
+    tags = []
+    trace_dur = 0
+    trace_doc = ""
+    for (duration, doc, tag) in cursor:
+        tags += [tag]
+        trace_dur = duration
+        trace_doc = doc
+    overview["tags"] = tags
+    overview["duration"] = trace_dur
+    overview["timestamp"] = trace_doc
+    cursor.close()
+    return overview
+
 def get_events(trace_id):
     events = []
     with urllib.request.urlopen("http://198.162.52.119:9000/traces/" + trace_id) as url:
@@ -28,7 +47,7 @@ def get_tasks(trace_id):
         tasks = json.loads(url.read().decode())
     return tasks
 
-def generate_trace_summary(events, tasks):
+def generate_trace_summary(events, tasks, overview):
     summary = "Done boss!"
 
     percentile_scores = {}
@@ -79,7 +98,10 @@ def generate_trace_summary(events, tasks):
 
     # Based on the above data, generate a templated summary for the trace
     template_summary = ""
-    # Number of anomalous events.
+    # Overview of the trace
+    template_summary += "The trace was created on " + str(overview["timestamp"].strftime("%d %b, %Y")) + " and it took around " + str(int(overview["duration"]/1e6)) + " seconds to complete."
+    template_summary += "The trace was associated with the following tags: " + ''.join(overview["tags"]) + ". "
+    # Number of anomalous events. 
     template_summary += "The trace had " + str(len(events)) + " events, out of which " + str(len(anomalous_events_set)) + " events had less than " + str(EVENT_PROB_THRESHOLD * 100) + "% chance of occurring."
     # Tasks Overview
     template_summary += " The execution of the request was performed by " + str(len(task_name)) + " tasks." 
@@ -120,7 +142,6 @@ def generate_trace_summary(events, tasks):
         task_summaries[task] = task_summary
         task_start_times[task] = sorted_events[0]['HRT']
 
-    print(task_start_times)
     # Join the individual summaries of each task to get
     # the execution summary of the trace
     execution_summary = ""
@@ -135,11 +156,12 @@ def generate_trace_summary(events, tasks):
 @api.route("/summary/<string:trace_id>", methods=['GET'])
 def summary(trace_id):
     print("Generating summary for", trace_id)
+    overview = get_overview(trace_id)
     # Get list of events for this trace
     events = get_events(trace_id)
     # Get list of tasks for this trace
     tasks = get_tasks(trace_id)
-    summary = generate_trace_summary(events, tasks)
+    summary = generate_trace_summary(events, tasks, overview)
     return summary
 
 def main():
