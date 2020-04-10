@@ -126,9 +126,8 @@ def generate_trace_summary(events, tasks, overview):
         # Grab the first event in the task and check its parent to find the task that created 
         # the current one, if it has one. If so add to the summary.
         if(sorted_events[0]["ParentEventID"] is not None):
-            parent_task_id = eventInfo[sorted_events[0]["ParentEventID"][0]]['ProcessName']\
-                + str(eventInfo[sorted_events[0]["ParentEventID"][0]]['ProcessID'])\
-                + str(eventInfo[sorted_events[0]["ParentEventID"][0]]['ThreadID'])
+            parent_event = eventInfo[sorted_events[0]["ParentEventID"][0]]
+            parent_task_id = parent_event['ProcessName'] + str(parent_event['ProcessID']) + str(parent_event['ThreadID'])
             task_summary += "Task " + task_name[parent_task_id] + " created task " + task_name[task] + ". "
             
 
