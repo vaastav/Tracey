@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import json
 import sys
 import scipy.stats as stats
@@ -6,6 +6,7 @@ from networkx import DiGraph
 from networkx.algorithms import is_directed_acyclic_graph
 from networkx.algorithms.traversal.edgedfs import edge_dfs
 from mysql.connector import Error, connect
+import os
 import urllib.request
 
 api = Flask(__name__)
@@ -34,6 +35,17 @@ def get_overview(trace_id):
     overview["timestamp"] = trace_doc
     cursor.close()
     return overview
+
+def get_all_traces():
+    global connection
+    cursor = connection.cursor()
+    query = "SELECT DISTINCT trace_id FROM overview"
+    cursor.execute(query)
+    traces = []
+    for (trace_id) in cursor:
+        traces += [trace_id[0]]
+    cursor.close()
+    return traces
 
 def get_events(trace_id):
     events = []
@@ -71,7 +83,9 @@ def generate_trace_summary(events, tasks, overview):
         # For each task figure out how many other consequent tasks are being run
         # Approximate this by figuring out how many concurrent tasks there were during
         # the full duration of the task. 
-        num_tasks = len(task['MolehillData'])
+        num_tasks = 0
+        if task['MolehillData'] is not None:
+            num_tasks = len(task['MolehillData'])
         if num_tasks > max_task_contention:
             max_task_contention = num_tasks
             max_task_contention_id = task_id
@@ -126,9 +140,12 @@ def generate_trace_summary(events, tasks, overview):
         # Grab the first event in the task and check its parent to find the task that created 
         # the current one, if it has one. If so add to the summary.
         if(sorted_events[0]["ParentEventID"] is not None):
-            parent_event = eventInfo[sorted_events[0]["ParentEventID"][0]]
-            parent_task_id = parent_event['ProcessName'] + str(parent_event['ProcessID']) + str(parent_event['ThreadID'])
-            task_summary += "Task " + task_name[parent_task_id] + " created task " + task_name[task] + ". "
+            # Some of the erroneous traces have events missing! Need to handle that scenario.
+            parent_event_id = sorted_events[0]["ParentEventID"][0]
+            if parent_event_id in eventInfo:
+                parent_event = eventInfo[parent_event_id]
+                parent_task_id = parent_event['ProcessName'] + str(parent_event['ProcessID']) + str(parent_event['ThreadID'])
+                task_summary += "Task " + task_name[parent_task_id] + " created task " + task_name[task] + ". "
             
 
         # Only include events that are user-annotated and not anything from the library.
@@ -145,12 +162,10 @@ def generate_trace_summary(events, tasks, overview):
     # the execution summary of the trace
     execution_summary = ""
     for task, summary in sorted(task_summaries.items(), key=lambda k : task_start_times[k[0]]):
-        execution_summary += task_name[task] + " - " + summary + "\n" 
+        execution_summary += summary + "\n" 
 
 
-    summary = template_summary + "\n\n" + execution_summary
-
-    return summary
+    return {"template" : template_summary, "execution" :  execution_summary}
 
 @api.route("/summary/<string:trace_id>", methods=['GET'])
 def summary(trace_id):
@@ -161,7 +176,24 @@ def summary(trace_id):
     # Get list of tasks for this trace
     tasks = get_tasks(trace_id)
     summary = generate_trace_summary(events, tasks, overview)
-    return summary
+    return jsonify(summary)
+
+@api.route("/allsummaries/", methods=['GET'])
+def all_summaries():
+    print("Getting all traces")
+    traces = get_all_traces()
+    for trace in traces:
+        if os.path.exists(os.path.join("./summary", trace + ".txt")):
+            continue
+        print("Generating summary for trace: ", trace)
+        overview = get_overview(trace)
+        events = get_events(trace)
+        tasks = get_tasks(trace)
+        summary = generate_trace_summary(events, tasks, overview)
+        with open(os.path.join("./summary", trace + ".txt"), 'w+') as outf:
+            outf.write(summary['template'] + "\n")
+            outf.write(summary['execution'] + "\n")
+    return "Done boss"
 
 def main():
     global connection
