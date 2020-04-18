@@ -8,6 +8,7 @@ from networkx.algorithms.traversal.edgedfs import edge_dfs
 from mysql.connector import Error, connect
 import os
 import urllib.request
+import diff_match_patch as dmp_module
 
 api = Flask(__name__)
 connection = {}
@@ -193,7 +194,56 @@ def all_summaries():
         with open(os.path.join("./summary", trace + ".txt"), 'w+') as outf:
             outf.write(summary['template'] + "\n")
             outf.write(summary['execution'] + "\n")
-    return "Done boss"
+    return "Done boss\n"
+
+@api.route("/compare/<string:trace1>/<string:trace2>", methods=['GET'])
+def compare(trace1, trace2):
+    diff = ""
+    trace1_summary = open(os.path.join("./summary", trace1 + ".txt"), 'r+').readlines()
+    trace2_summary = open(os.path.join("./summary", trace2 + ".txt"), 'r+').readlines()
+    dmp = dmp_module.diff_match_patch()
+    html = ""
+    matched_lines_t2 = set()
+    unmatched_lines_t1 = set()
+    # We want to compare summaries at the granularity of task
+    for i in range(len(trace1_summary)):
+        line1 = trace1_summary[i]
+        match_found = False
+        for j in range(len(trace2_summary)):
+            if match_found:
+                break
+            line2 = trace2_summary[j]
+            # The first line in the summary are the templated overview so they are comparable
+            if i == 0 and j == 0:
+                diff = dmp.diff_main(line1, line2)
+                dmp.diff_cleanupSemantic(diff)
+                html += dmp.diff_prettyHtml(diff) + "\n"
+                matched_lines_t2.add(j)
+                match_found = True
+            if j in matched_lines_t2:
+                continue
+            l1_tokens = line1.split('.')
+            l2_tokens = line2.split('.')
+            # Two lines are of the same task if their 1st sentences match
+            if l1_tokens[0] == l2_tokens[0]:
+                match_found =  True
+                diff = dmp.diff_main(line1, line2)
+                dmp.diff_cleanupSemantic(diff)
+                html += dmp.diff_prettyHtml(diff) + "\n"
+                matched_lines_t2.add(j)
+        if not match_found:
+            unmatched_lines_t1.add(i)
+    for i in range(len(trace1_summary)):
+        if i in unmatched_lines_t1:
+            diff = dmp.diff_main(trace1_summary[i], "")
+            dmp.diff_cleanupSemantic(diff)
+            html += dmp.diff_prettyHtml(diff) + "\n"
+    for j in range(len(trace2_summary)):
+        if j not in matched_lines_t2:
+            diff = dmp.diff_main("", trace2_summary[j])
+            dmp.diff_cleanupSemantic(diff)
+            html += dmp.diff_prettyHtml(diff) + "\n"
+    return html
 
 def main():
     global connection
