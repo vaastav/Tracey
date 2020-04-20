@@ -1,2 +1,24 @@
 \section{Data}
 \label{sec:data}
+
+\subsection{Trace Structure}
+
+A trace is a Directed Acyclic Graph (DAG) of spans. A span can be thought
+of as a particular task that a system performs to execute a request. The granularity of the task
+is user-defined and controlled. A span can represent anything from a single function execution, 
+a single thread execution, or a single operating system process comprised of multiple threads.
+Spans are connected to each other by parent-child relationships. 
+Each span records its timing and duration, as well as arbitrary key-value annotations provided by a developer: such as logging a span's arguments.
+Within a span, developers can also add \emph{events}, which are typically \textbf{unstructured, human-annotated slog messages.}
+Span annotations and events are developer-defined and vary from system to system.
+Each individual trace can be very large, comprising thousands of spans and events~\cite{kaldor2017canopy, las2019sifter, shkurographdiffviz}, and production systems capture traces for millions of requests per day~\cite{kaldor2017canopy}.
+
+Most distributed tracing frameworks represent traces using spans~\cite{jaeger,opentelemetry,sigelman2010dapper}, but some frameworks are based only on events~\cite{fonseca2007xtrace}.  
+For event-based frameworks, it is straightforward to group events together into spans (\eg events occurring in the same thread). 
+In this paper we use the term \emph{task} to refer to both of these concepts. In span-based tracing frameworks a task corresponds to a span and in event-based tracing
+frameworks a task corresponds to a collection of events.
+
+\subsection{Dataset}
+
+For the development and evaluation of our techniques, we use the open source deathstarbench trace dataset~\cite{anand2019deathstarbenchtraces}.
+The dataset contains 22285 individual traces obtained from the DeathStarBench open-source benchmark for cloud microservices~\cite{gan2019deathstar}.
