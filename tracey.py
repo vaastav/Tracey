@@ -9,6 +9,7 @@ from mysql.connector import Error, connect
 import os
 import urllib.request
 import diff_match_patch as dmp_module
+from timeit import default_timer as timer
 
 api = Flask(__name__)
 connection = {}
@@ -17,6 +18,15 @@ EVENT_PROB_THRESHOLD=0.25
 TASK_PERCENTILE_THRESHOLD_LOW=5.0
 TASK_PERCENTILE_THRESHOLD_HIGH=95.0
 LABEL_BLACKLIST = ["ThreadLocalBaggage::Branch", "ThreadLocalBaggage::Set", "ThreadLocalBaggage::Swap", "ThreadLocalBaggage::Join", "ThreadLocalBaggage::Delete"]
+
+class SummaryPerf:
+    def __init__(self,data_load_time,summary_generation_time):
+        self.load_time = data_load_time
+        self.gen_time = summary_generation_time
+        self.total_time = data_load_time + summary_generation_time
+
+    def __str__(self):
+        return str(self.load_time) + "," + str(self.gen_time) + "," + str(self.total_time)
 
 def get_overview(trace_id):
     global connection
@@ -183,17 +193,28 @@ def summary(trace_id):
 def all_summaries():
     print("Getting all traces")
     traces = get_all_traces()
+    perf_list = []
     for trace in traces:
-        if os.path.exists(os.path.join("./summary", trace + ".txt")):
-            continue
+        #if os.path.exists(os.path.join("./summary", trace + ".txt")):
+        #    continue
         print("Generating summary for trace: ", trace)
+        load_start = timer()
         overview = get_overview(trace)
         events = get_events(trace)
         tasks = get_tasks(trace)
+        load_end = timer() - load_start
+        gen_start = timer()
         summary = generate_trace_summary(events, tasks, overview)
+        gen_end = timer() - gen_start
+        perf = SummaryPerf(load_end, gen_end)
+        perf_list += [perf]
         with open(os.path.join("./summary", trace + ".txt"), 'w+') as outf:
             outf.write(summary['template'] + "\n")
             outf.write(summary['execution'] + "\n")
+    with open('summary_time.csv', 'w+') as outf:
+        outf.write("Load_Time,Gen_Time,Total_Time\n")
+        for perf in perf_list:
+            outf.write(str(perf) + "\n")
     return "Done boss\n"
 
 @api.route("/compare/<string:trace1>/<string:trace2>", methods=['GET'])
