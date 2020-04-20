@@ -1,2 +1,45 @@
 \section{Introduction}
 \label{sec:intro}
+
+Distributed systems are prevalent in society to the extent that billions of people either directly or 
+indirectly depend on the correct functioning of a distributed system. From banking applications to social
+networks, from large-scale data analytics to online video streaming, from web searches to cryptocurrencies,
+most of the successful computing applications of today are powered by distributed systems.
+The meteoric rise of cloud computing in the past decade has only increased our dependence on these
+distributed systems in our lives.
+
+Tasks like monitoring, root cause analysis, performance comprehension require techniques that cut across component,
+system, and machine boundaries to collect, correlate, and integrate data. In the past decade, distributed tracing has emerged as an effective way to gain visibility across distributed systems~\cite{mace2015pivot,mace2018universal,fonseca2007xtrace}.  
+Today distributed tracing frameworks are deployed at all major internet companies~\cite{kaldor2017canopy,sigelman2010dapper,netflixtracing}; 
+notable open-source examples include OpenTelemetry~\cite{opentelemetry}, Jaeger~\cite{jaeger}, and Zipkin~\cite{zipkin}; and 
+observability-focused companies offer platforms centered on analysis of traces~\cite{lightstep}.
+
+Distributed tracing tools arose out of a need to understand the behavior of \emph{individual requests}: identifying the specific services 
+invoked by a request, diagnosing problematic requests, and debugging correctness issues~\cite{fonseca2007xtrace,sigelman2010dapper,macewe}.
+As a result, each trace only tells the story of a single request.
+A trace represents the path of one request through the system and contains information such as the timing of requests, 
+the events executed, and the nodes where these events were executed. Moreover, traces can be used
+to identify slow requests and understand the difference between request executions. 
+
+However, as distributed tracing is designed for production distributed systems, a large volume of data
+is produced on a daily basis. It is humanly impossible to manually analyze each trace and draw inference
+about the system as a collective. Current analysis tools primarily focus on visualzing a single trace
+and provide little help to the user for analyzing a large amount of data. Moreover, current analysis
+tools struggle with highlighting the difference between any given two traces due to the complex temporal
+and structural properties of traces. Both of these limitations results in the lack of techniques for
+comparing a trace with an aggregate set of traces to explain to a user how a potentially erroneous trace
+might differ from a set of pre-identified ``good'' traces.
+
+In this paper, we present techniques for comparing two traces, aggregating a set of traces, and comparing
+a trace with a set of traces. The key idea behind our techniques is that language is a proven mechanism
+for explaining things to humans; thus our key insight is to create a text representation for any given trace.
+To this extent, we describe a novel framework that generates a text representation
+for each trace detailing the execution behavior of the system for the particular request. We then
+model the trace comparison tasks as text comparison tasks and present a metric for calculating
+the difference between the two traces based on the edit distance between their corresponding text representations.
+Lastly, we present trace aggregation as a multi-document summarization task where each trace corresponds
+to a single document. \autoref{sec:data} describes the trace data. \autoref{sec:tasks} describes
+the user-tasks and how we model them as NLP tasks in detail. \autoref{sec:contribution} explains
+the design, implementation, and technical details of our techniques. \autoref{sec:evaluation} presents
+an evaluation of our techniques and \autoref{sec:discussion} discusses the limitations of our techniques
+and how we plan to address them in future work.

@@ -3,7 +3,11 @@
 \usepackage{times}
 \usepackage{latexsym}
 
+% Add line breaks to urls
 \usepackage{url}
+\makeatletter
+\g@addto@macro{\UrlBreaks}{\UrlOrds}
+\makeatother
 
 \usepackage{hyperref}
 
@@ -31,7 +35,7 @@
 % smaller than 5cm (the original size); we will check this
 % in the camera-ready version and ask you to change it back.
 
-\title{Tracey: Generating text summaries from distributed traces}
+\title{Distributed Trace Comparison and Aggregation using NLP techniques}
 
 \author{Vaastav Anand\\
   {\tt vaastav@cs.ubc.ca} \\\And
@@ -50,7 +54,6 @@
 \input{data}
 \input{tasks}
 \input{contribution}
-\input{implementation}
 \input{evaluation}
 \input{discussion}
 \input{related}
