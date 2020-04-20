@@ -217,6 +217,33 @@ def all_summaries():
             outf.write(str(perf) + "\n")
     return "Done boss\n"
 
+@api.route("/dataset_info/", methods=['GET'])
+def dataset_info():
+    global connection
+    cursor = connection.cursor()
+    query = "SELECT COUNT(*) FROM events GROUP BY trace_id"
+    cursor.execute(query)
+    num_events = []
+    for (event_count) in cursor:
+        num_events += [event_count[0]]
+    cursor.close()
+    cursor = connection.cursor()
+    query = "SELECT COUNT(*) FROM tasks GROUP BY trace_id"
+    cursor.execute(query)
+    num_tasks = []
+    for (task_count) in cursor:
+        num_tasks += [task_count[0]]
+    cursor.close()
+    with open('num_events.csv', 'w+') as outf:
+        outf.write("Num_Events\n")
+        for e in num_events:
+            outf.write(str(e) + "\n")
+    with open('num_tasks.csv', 'w+') as outf:
+        outf.write("Num_Tasks\n")
+        for t in num_tasks:
+            outf.write(str(t) + "\n")
+    return "Done boss\n"
+
 @api.route("/compare/<string:trace1>/<string:trace2>", methods=['GET'])
 def compare(trace1, trace2):
     diff = ""
