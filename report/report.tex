@@ -1,0 +1,64 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[hyperref]{naaclhlt2019}
+\usepackage{times}
+\usepackage{latexsym}
+
+\usepackage{url}
+
+\usepackage{hyperref}
+
+\renewcommand*\sectionautorefname{Section}
+\renewcommand*\subsectionautorefname{Section}
+\renewcommand*\subsubsectionautorefname{Section}
+
+% The below commands color the "Figure" and "Table" caption prefixes
+\definecolor{figurecolor}{RGB}{22,90,220}
+\definecolor{citecolor}{RGB}{198,81,19}
+\captionsetup[figure]{labelfont={color=figurecolor}}
+\captionsetup[table]{labelfont={color=figurecolor}}
+% PDF metadata
+\hypersetup{ colorlinks=true, urlcolor=black, linkcolor=figurecolor, citecolor=citecolor, pdfstartview=FitH,
+        pdftitle={Aggregate-Driven Trace Visualizations for Performance Debugging},
+        pdfauthor={}
+        }
+
+\aclfinalcopy % Uncomment this line for the final submission
+%\def\aclpaperid{***} %  Enter the acl Paper ID here
+
+%\setlength\titlebox{5cm}
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
+
+\title{Tracey: Generating text summaries from distributed traces}
+
+\author{Vaastav Anand\\
+  {\tt vaastav@cs.ubc.ca} \\\And
+  Joseph Wonsil \\
+  {\tt jwonsil@cs.ubc.ca} \\}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\input{abstract}
+
+\input{intro}
+\input{data}
+\input{tasks}
+\input{contribution}
+\input{implementation}
+\input{evaluation}
+\input{discussion}
+\input{related}
+\input{conclusion}
+
+\bibliography{report}
+\bibliographystyle{acl_natbib}
+
+\appendix
+
+\end{document}
