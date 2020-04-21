@@ -1,2 +1,42 @@
 \section{Related Work}
 \label{sec:related}
+
+Building trace aggregation and trace comparison tools have garnered a lot of effort from both industry and academia in the past decade.
+All of these efforts have been focused at developing visualization techniques.
+Pintrace~\cite{pintrace}, the distributed tracing system at Pinterest, uses aggregate analysis to compare two different groups of traces to 
+narrow down the root cause of an error. However, the granularity of the comparison is coarse as the comparison
+is only performed on the distribution of latencies of the traces in each group.
+This is only useful for identifying high-level trends. Early work on trace comparison similarly compared latency distributions,
+but required traces to be structurally isomorphic~\cite{sambasivan2011diagnosing, sambasivan2013visualizing}; this is rare in practice as
+most traces are structurally unique~\cite{las2019sifter}. XTrace~\cite{fonseca2007xtrace} has a trace comparison tool
+that uses a graph difference algorithm to visualize the diff between the event graphs of two traces. Although, the visualization
+can highlight unique events in each trace, it fails to explain to the user what these events are.
+Recent work at Uber~\cite{shkurographdiffviz} compares the structure of incoming 
+traces with a ``good'' set of traces to find ``bad'' traces and then visualizes their difference as a directed graph. This involves 
+extracting features from the ``good'' traces and then comparing that against a potentially ``bad'' trace. It is not particularly
+clear how effective such a visualization is in practice. The techniques we have discussed use textual representation instead of visual
+representation of traces which we believe is superior for explaining the differences between traces as well as similarities between traces.
+
+Traditional text generation systems generate text from data using hand-crafted specifications and rules for generating
+text from data~\cite{dale2003coral,reiter2005choosing,portet2009automatic,turner2009generating}. However,
+there have also been a rise in data-driven and neural approaches that aim to learn the working of the text generation
+modules - content planning, sentence planning, and surface realization - either individually or in a combined fashion~\cite{barzilay2005collective,barzilay2006aggregation,konstas2013global,lebret2016neural}.
+Our text generation approach is similar to the traditional approach where we write explicit templates and rules
+for generating text from a trace. We leave the use of neural and data-driven approaches for text generation from
+traces as future work.
+
+Text similarity is a widely-studied task with many different techniques and measures~\cite{gomaa2013survey}.
+Similarity measures are broadly classified into two categories - string-based similarity and corpus-based similarity.
+In this work, we choose Levenshtein distance as our similarity measure for trace text comparison as Levenshtein distance
+accounts for insertions, deletions, and substitutions which corresponds one-to-one with missing events, new events,
+and reordered events. It additionally has the benefit of accounting for the ordering of the letters/words in the strings
+which is important for our trace text as the ordering of sentences in the strings for a task inside a trace's text
+encodes temporal relationship between the events.
+
+Multi-Document Summarization techniques are either extractive or abstractive. Extractive techniques~\cite{xiao2019extractive,liu2019hierarchical,erkan2004lexrank} extract key sentences
+and phrases from documents based on some sort of similarity score between pairs of phrases or sentences and
+uses a ranking algorithm as to select the phrases to be included in the summary. However, extractive techniques do not respect
+the ordering of the sentences which are temporally relevant for the trace text we are summarizing.
+Abstractive techniques~\cite{devlin2018bert,bing2015abstractive} formulate facts from the documents and then attempts to rewrite the summary from scratch. These approaches
+do not fit our end-goal of using the aggregate trace text summary for comparison with other traces. However, we do note
+that these techniques can be useful for generating a summary that provides a better explanation of the traces to users.
