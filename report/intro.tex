@@ -23,7 +23,7 @@ to identify slow requests and understand the difference between request executio
 
 However, as distributed tracing is designed for production distributed systems, a large volume of data
 is produced on a daily basis. It is humanly impossible to manually analyze each trace and draw inference
-about the system as a collective. Current analysis tools primarily focus on visualzing a single trace
+about the system as a collective. Current analysis tools primarily focus on visualizing a single trace
 and provide little help to the user for analyzing a large amount of data. Moreover, current analysis
 tools struggle with highlighting the difference between any given two traces due to the complex temporal
 and structural properties of traces. Both of these limitations results in the lack of techniques for
@@ -45,8 +45,12 @@ might differ from a set of pre-identified ``good'' traces.
 \end{figure*}
 
 In this paper, we present techniques for comparing two traces, aggregating a set of traces, and comparing
-a trace with a set of traces. The key idea behind our techniques is that language is a proven mechanism
-for explaining things to humans; thus our key insight is to create a text representation for any given trace.
+a trace with a set of traces. The key idea behind our techniques is to first convert each trace into
+an equivalent text representation and then construct techniques for performing aggregation and comparsion.
+The benefits of such an approach are two-fold: (i) There has been a plethora of research in the fields
+of text comparison and text summarization and we can leverage these existing techniques; (ii) Language
+is a proven way of communicating complex information in an understandable format for human beings.
+
 To this extent, we describe a novel framework that generates a text representation
 for each trace detailing the execution behavior of the system for the particular request. We then
 model the trace comparison tasks as text comparison tasks and present a metric for calculating
