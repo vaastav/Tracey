@@ -9,10 +9,10 @@ these user tasks as traditional NLP tasks. The list of tasks are as follows:
         that generates text from a data source, in this case, tracing data. Thus, this is a Data2Text task.
     \item Generating an aggregate representation of traces. We model this task as a \emph{Multi-Document Summarization} task
         where each document is the text representation generated for a trace.
-    \item Comparing and explaining the differences between two traces. We model this task as a \emph{Text Comparison and Similarity} task
+    \item Comparing and explaining the differences between two traces. We model this task as a \emph{Text Similarity} task
         where instead of comparing the raw structure of the two traces, we instead compare their corresponding text representations. The
         difference between the two traces can then be modeled as a function of the edit distance between their corresponding text representations.
-    \item Comparing one trace to an aggregate set of traces. We also model this task as a \emph{Text Comparison and Similarity} task
+    \item Comparing one trace to an aggregate set of traces. We also model this task as a \emph{Text Similarity} task
         where we comparing the text representation of a trace with the generated summary of the aggregate set of traces using our technique described
         in Task 2. Similar to Task 3, the difference between the trace and the aggregated summary can be modeled as a function of the edit distance
         between their corresponding text representations.
