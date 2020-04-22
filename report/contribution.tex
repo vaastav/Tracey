@@ -3,6 +3,69 @@
 
 \subsection{Trace2Text}
 
+The task of text generation from data can be divided into 
+three modular interdependent tasks - (i) \emph{content planning}
+defines which parts of the input fields or meaning representations
+should be selected; (ii) \emph{sentence planning} determines
+which selected fields are to be dealt with in each output sentence;
+and (iii) \emph{surface realization} generates those sentences.
+To obtain processed trace data, we use a backend server
+for trace processing that we had built as part of the visualization
+course last semester\footnote{The source code of the backend server is located at \url{https://github.com/vaastav/TraViz/tree/master/traviz_backend}}.
+The input data for each trace includes, some overview information of the trace,
+the list of events, and the list of tasks for that trace. 
+For each event, the human annotated-text as well as the probability of that event occurring
+is included.
+For each task, a list of concurrent tasks that were happening during the task's execution
+are also included. \emph{The goal is to generate a text representation of the trace
+that includes information describing the execution of the trace and overview information
+that would be useful for the user.}
+
+% escapechar sets the escape character that we can use to exit into latex mode.
+\begin{lstlisting}[caption={Annotated overview paragraph generated for a trace},captionpos=b,label={fig:trace_owtext}, escapechar=\#]
+#\circled{1}# The trace was created on 31 May, 2019 and it took around 422 seconds to complete.
+#\circled{2}# The trace was associated with the following tags: ComposePost NginxWebServer5.
+#\circled{3}# The trace had 388 events, out of which 28 events had less than 25.0 chance of occurring.
+#\circled{4}# The execution of the request was performed by 22 tasks. 3 tasks had latency that ranked higher than the 95th percentile of the latency distribution for the respective task. 
+#\circled{5}# Task performing the operation UrlShortenHandler::UploadUrlsMongoInsert had the maximum amount of contention with 7 other tasks performing the same operation at the same time for different requests.
+\end{lstlisting}
+
+\fakepara{Content Planning} The content planner parses the input data to extract the information
+needed to generate the overview text and the execution text. From the list of events, the number
+of anomalous events are extracted. An anomalous event is an event that has probability lower
+than a pre-defined threshold. The content planner also constructs a Directed Acyclic Graph
+of the events based on the causal relationships of the events. For each task in the list of tasks,
+an array of temporally ordered events are created that occurred on that task. The task with most number of
+concurrent tasks is also extracted.
+
+\fakepara{Sentence Planning} The sentence planner separates the content by planning to generate one paragraph
+for each task in the trace as well as one paragraph for overview information about the trace.
+The information contained inside the paragraph would be the name of the task that created this task
+and labels from the events associated with the task.
+The overview paragraph provides overview information about the trace such as latency, tags, and other metadata.
+It also includes information about anomalous events and tasks.
+
+\fakepara{Surface Realization} The surface realization is currently static as it is done based on
+a pre-defined template. \autoref{fig:trace_owtext} shows an annotated example of the overview paragraph generated for a trace.
+\circled{1} provides information about when the trace was created and what was the latency of the task.
+\circled{2} mentions the tags associated with the trace.
+\circled{3} contains the total number of events in the trace and the number of anomalous events. 
+\circled{4} has the number of tasks in the trace and the number of tasks which have latencies that lie in the 95th percentile of the latency distributions
+of their respective tasks. 
+\circled{5} provides the name of the task that had the most number of concurrent tasks executing at the same time.
+\autoref{fig:trace_tasktext} shows an annotated example of the paragraph generated for a task in a trace.
+\circled{1} describes which task, if any, created this particular task.
+\circled{2} is the name of the task.
+Each sentence following \circled{2} is the human-annotated label of the corresponding event that occurred on that task.
+The sentences are ordered w.r.t to the ordering of the events for that task.
+
+% escapechar sets the escape character that we can use to exit into latex mode.
+\begin{lstlisting}[caption={Annotated paragraph generated for a task in a trace},captionpos=b,label={fig:trace_owtext}, escapechar=\#]
+#\circled{1}# Task NginxWebServer created task MediaHandler::UploadMedia. 
+#\circled{2}# MediaHandler::UploadMedia. 
+Uploading media to compose post service. Popping client from client pool. Obtaining lock on client pool mutex. Obtained lock on client pool mutex. No client available in client pool. Creating a new client. Releasing lock on client pool mutex. Connecting to client. Pushing a client into client pool. Acquiring lock on mutex. Acquired lock on mutex. Pushing client back into client pool. Releasing lock on mutex. MediaHandler::UploadMedia complete. 
+\end{lstlisting}
+
 \subsection{Trace Summarization}
 
 \subsection{Trace Diff}

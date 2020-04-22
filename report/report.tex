@@ -6,6 +6,8 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 
+\usepackage{listings}
+
 % Add line breaks to urls
 \usepackage{url}
 \makeatletter
@@ -14,15 +16,34 @@
 
 \usepackage{hyperref}
 
+% Add a fake para command
+\newcommand{\fakepara}[1]{\vspace{0mm}\noindent\textbf{#1}\quad}
+
+% Change the caption prefix for listings to a figure
+\renewcommand{\lstlistingname}{Figure}
+
+% Change the autoref names of the various subsections
 \renewcommand*\sectionautorefname{Section}
 \renewcommand*\subsectionautorefname{Section}
 \renewcommand*\subsubsectionautorefname{Section}
+% Add an autoref name for the listing environment
+\newcommand*\lstlistingautorefname{Figure}
 
-% The below commands color the "Figure" and "Table" caption prefixes
+% Make the listings and figure environments share the fucking counter
+\makeatletter
+\AtBeginDocument{%
+  \let\c@figure\c@lstlisting
+  \let\thefigure\thelstlisting
+  \let\ftype@lstlisting\ftype@figure % give the floats the same precedence
+}
+\makeatother
+
+% The below commands color the "Figure", "Listing", and "Table" caption prefixes
 \definecolor{figurecolor}{RGB}{22,90,220}
 \definecolor{citecolor}{RGB}{198,81,19}
 \captionsetup[figure]{labelfont={color=figurecolor}}
 \captionsetup[table]{labelfont={color=figurecolor}}
+\captionsetup[lstlisting]{labelfont={color=figurecolor}}
 % PDF metadata
 \hypersetup{ colorlinks=true, urlcolor=black, linkcolor=figurecolor, citecolor=citecolor, pdfstartview=FitH,
         pdftitle={Aggregate-Driven Trace Visualizations for Performance Debugging},
@@ -31,6 +52,27 @@
 
 \aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
+
+\usepackage{tikz}
+\usepackage{microtype}
+\usepackage{relsize}
+\usepackage{xspace}
+% Command for drawing numbers inside circles
+%\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+%            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+\newcommand{\circled}[1]{{\small\protect\raisebox{0.5pt}{\textcircled{\raisebox{-.2pt}{\textls[-50]{\relsize{-1.5}\phantom{0}\makebox[0pt][c]{#1}\phantom{0}}}}}}\xspace}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{xcolor} % for \textcolor
+\usepackage{amsmath} % for \hookrightarrow
+
+% Setting the listing environment to have linebreaks
+\lstset{
+  columns=fullflexible,
+  frame=single, % draws a box around the listing
+  breaklines=true, % breaks the lines
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space} % adds an extra red arrow to indicate a line break!
+}
 
 %\setlength\titlebox{5cm}
 % You can expand the titlebox if you need extra space
