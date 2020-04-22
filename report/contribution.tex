@@ -60,7 +60,7 @@ Each sentence following \circled{2} is the human-annotated label of the correspo
 The sentences are ordered w.r.t to the ordering of the events for that task.
 
 % escapechar sets the escape character that we can use to exit into latex mode.
-\begin{lstlisting}[caption={Annotated paragraph generated for a task in a trace},captionpos=b,label={fig:trace_owtext}, escapechar=\#]
+\begin{lstlisting}[caption={Annotated paragraph generated for a task in a trace},captionpos=b,label={fig:trace_tasktext}, escapechar=\#]
 #\circled{1}# Task NginxWebServer created task MediaHandler::UploadMedia. 
 #\circled{2}# MediaHandler::UploadMedia. 
 Uploading media to compose post service. Popping client from client pool. Obtaining lock on client pool mutex. Obtained lock on client pool mutex. No client available in client pool. Creating a new client. Releasing lock on client pool mutex. Connecting to client. Pushing a client into client pool. Acquiring lock on mutex. Acquired lock on mutex. Pushing client back into client pool. Releasing lock on mutex. MediaHandler::UploadMedia complete. 
@@ -82,3 +82,44 @@ approach. Each document in a task is analyzed and the sentences are mapped into 
 weighted based on how often the connecting node was the following sentence in a document. 
 
 \subsection{Trace Diff}
+
+\begin{figure*}[tbh]
+    \begin{equation}\label{eqn:disttrace}
+    \texttt{distance} = \sum_{t \in T_1 \cup T_2} disttask(t)
+    \end{equation}
+    
+    \begin{equation}\label{eqn:disttask}
+        disttask(t)=
+        \begin{cases}
+            \texttt{Levenshtein}(t1, t2), \texttt{if}\: t \in T_1 \cap T_2, t1 \in T_1, t2 \in T_2 \\
+            P * \texttt{numsentences}(t), \texttt{if}\: t \in (T_1 \setminus T_2) \cup (T_2 \setminus T_1).\\
+        \end{cases}
+    \end{equation}
+    \end{figure*}
+
+To compare two traces, we choose to compare their corresponding texts. For calculating the difference
+between the two text representations, we use Google's diff-match-patch library\footnote{Library available at \url{https://github.com/google/diff-match-patch}}.
+However, instead of just computing the diff between the two texts, we strive for a much finer granularity, and instead
+compute the diff between the texts by computing the diffs between the common tasks amongst the two traces.
+Tasks that are only present in either trace are automatically treated as insertions or deletions in the diff.
+\autoref{fig:taskdiff} shows the output of the diff function applied to one common task in two traces.
+The uncolored, normal text represents sentences (i.e. events) that are present in both traces. The struck-out,
+red text represents the text that is only present in trace 1 but not in trace 2. The italic, green text represents
+the text that is only present in trace 2 but not in trace 1.
+
+% escapechar sets the escape character that we can use to exit into latex mode.
+\begin{lstlisting}[caption={Text Difference for a task from 2 traces},captionpos=b,label={fig:taskdiff}, escapechar=\#]
+    Task NginxWebServer created task MediaHandler::UploadMedia. MediaHandler::UploadMedia. Uploading media to compose post service. Popping client from client pool. Obtaining lock on client pool mutex. Obtained lock on client pool mutex. #\textcolor{red}{\sout{No client available in client pool. Creating a new client}}\textcolor{green}{\emph{Popping client from front of the pool}}#. Releasing lock on client pool mutex. Connecting to client. Pushing a client into client pool. Acquiring lock on mutex. Acquired lock on mutex. Pushing client back into client pool. Releasing lock on mutex. MediaHandler::UploadMedia complete
+\end{lstlisting}
+
+\fakepara{Trace Distance} Based on our diff function above, we also provide a new metric for calculating
+the distance between any two traces. Let $T_1$ be the set of tasks in Trace 1 and $T_2$ be the set
+of tasks in Trace 2. Then, the distance between the two traces is the sum of the distances for each task
+in $T_1$ and $T_2$. \autoref{eqn:disttrace} shows the formal definition of the function for calculating
+the distance between the text representations of two traces.
+The disttask function for a task defines the distance calculated for this task between Trace 1 and Trace 2.
+If the task is present in both the traces, then the cost is simply the Levenshtein distance between the paragraphs
+for this task in the two traces. However, if the task is only present in one of the traces, then the distance is
+the number of sentences in the paragraph for that task multiplied by some pre-defined task missing penalty, $P$.
+Currently, $P$ is set to 10 but can be changed depending on the needs of the users. \autoref{eqn:disttask}
+shows the formal definition for calculating the distance between the text representations of a task in two traces.

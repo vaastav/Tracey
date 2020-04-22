@@ -28,6 +28,7 @@
 \renewcommand*\subsubsectionautorefname{Section}
 % Add an autoref name for the listing environment
 \newcommand*\lstlistingautorefname{Figure}
+%\newcommand*\equationautorefname{Equation}
 
 % Make the listings and figure environments share the fucking counter
 \makeatletter
@@ -73,6 +74,10 @@
   breaklines=true, % breaks the lines
   postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space} % adds an extra red arrow to indicate a line break!
 }
+
+\usepackage[normalem]{ulem} % for \sout
+
+\usepackage{amssymb} % for math symbols
 
 %\setlength\titlebox{5cm}
 % You can expand the titlebox if you need extra space

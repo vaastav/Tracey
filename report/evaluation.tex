@@ -29,14 +29,14 @@ and trace comparison techniques.
     \label{fig:summary_cdf}
 \end{figure}
 
-To measure the scalability of our text generation approach, we measure the time taken
+\fakepara{Quantiative Analysis} To measure the efficiency of our text generation approach, we measure the time taken
 to generate the text for every trace in the DeathStarBench dataset. \autoref{fig:summary_cdf}
 shows the CDF of the breakdown of the total time taken to generate the text. The time taken
 to generate the text is dominated by the time taken to load the data from the backend server.
 However, once the data is available, the time taken to generate the text is less than 10 milliseconds
 for all traces.
 
-To evaluate the quality of the text generated, the user mentioned the following:\textcolor{red}{``The first sentence is the interesting one here; the rest of the sentences are a bit difficult to parse.
+\fakepara{Qualitative Analysis} To evaluate the quality of the text generated, the user mentioned the following:\textcolor{red}{``The first sentence is the interesting one here; the rest of the sentences are a bit difficult to parse.
 The interesting parts of the first sentence are the comparisons to general statistics about the trace dataset.  I like the last sentence, because it's starting to push towards deriving a 
 root cause for the latency (ie, contention with other tasks), and I think when it's presented as text that's a very digestable representation (vs. some sort of visual interface)."}
 This suggests that the expert user believes that the overview paragraph is very useful for explaining root causes of potential problems and does so better than a potential
@@ -55,17 +55,53 @@ as a baseline.
 \fakepara{Micro-scalability} We tested the scalability of the summarizers at a document-level. We split up the summarization to be at a task level. 
 This means that each task in a given summarization job will have its own set of documents. 
 To perform a micro-scalability evaluation we looked at only a single task's documents. We chose a task that had over 500 documents, each one about a paragraph long. 
-We ran the summarization algorithm on an increasing number of tasks and recorded the results which can be seen in Figure \ref{}. Our baseline, potara, is unusable after
+We ran the summarization algorithm on an increasing number of tasks and recorded the results which can be seen in \autoref{}. Our baseline, potara, is unusable after
 about 100 traces. 
 
 \fakepara{Summary Quality} We determined our summaries should be able to capture a general idea of the ``regular'' execution state of the task being summarized. 
 A task may have hundreds of sentences in its documents, but only 20 are unique. As a metric for summary quality
-we checked how many of the unique sentences in a tasks corpus were present in a summary. The quality results can be found in Figure \ref{}. Potara is not able to capture 
+we checked how many of the unique sentences in a tasks corpus were present in a summary. The quality results can be found in \autoref{}. Potara is not able to capture 
 the a general idea of a regular execution because at max it is using 50\% of the unique sentences in a tasks corpus of sentences. 
 
 \fakepara{Macro-scalability} While it is important to know how a summarizer works at a document level, we are summarizing entire sets of traces. Therefore
 we ran scalability experiments where an increasing number of traces were summarized. Since traces can have multiple tasks, this means that each summarization job 
 in this experiment is actually running multiple times, once for each task, before it is considered complete. We ran these experiments on sets up to 1000 traces large and the 
-results can be found in Figure \ref{}. Similar to the micro-scalability benchmarks, it is important to note the lack of scalability in potara. 
+results can be found in \autoref{}. Similar to the micro-scalability benchmarks, it is important to note the lack of scalability in potara. 
 
 \subsection{Trace Comparison}
+
+\begin{table}[]
+    \begin{tabular}{|l|c|}
+    \hline
+    Trace Pair                              & Distance \\
+    \hline
+    \hline
+    Identical Traces                        & 0.0      \\
+    \hline
+    Non-Error traces of same type (API)     & 258.0    \\
+    \hline
+    1 Error, 1 Non-Error trace of same type (API) & 1610.0  \\
+    \hline
+    Traces of different type (API)          & 1815.0   \\
+    \hline
+    \end{tabular}
+    \caption{Measured Distance based on our distance function for randomly chosen pairs of traces.}
+    \label{tab:comparison_dist}
+\end{table}
+
+\fakepara{Quantiative Analysis} We first measured the amount of time taken to generate the diff between the text representations
+of two traces. From the DeathStarBench, we randomly chose 100 different pairs of traces and measured the time taken
+to generate the diff between the trace. On average, it took 4.87 milliseconds to generate the diff and measure the distance
+between two pairs of traces.
+
+\fakepara{Accuracy of Distance function} We wanted to ensure that the distance function we had come up behaves in the expected way
+when computing the distance between pairs of traces. \autoref{tab:comparison_dist} shows our detailed results. First,
+the distance function returns 0 when computing the distance between two identical traces. Furthermore, the distance function
+grows monotonically with increase in deviation between traces. 
+
+\fakepara{Qualitative Analysis of Diff} Regarding the quality of the comparison generated, the user mentioned the following:\textcolor{red}{``This is really cool, I'm actually 
+surprised how amenable the complex trace data is to being represented as text.  I've always wondered how to visually compare two traces;I 
+really like how you've leveraged some of the more established visual indicators of text comparison (the green+ / red- idiom). With trace diff,
+I understand now why having a more verbose trace representation in text is useful.  It's not interesting by itself, but the diffs provide 
+context for honing in on specific parts of the text.''} This suggests that the trace diff that we generated using text diff is successful.
+However, we do believe that it has certain limitations that we discuss in \autoref{sec:discussion}.
