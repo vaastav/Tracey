@@ -3,7 +3,46 @@
 
 \subsection{Experimental Setup}
 
+We perform a quantitative evaluation to evaluate
+the scalability of our techniques as well as the quality
+of the text, comparisons, and the summaries generated.
+For the Text Generation and Trace Comparison evaluation,
+all results were collected on
+an Intel i7-core 3.1GHz processor machine with 32GB of RAM.
+For the Trace Summarization evaluation, all results were
+collected on an Intel(R) Xeon (R) CPU E5-2690 v3 @ 2.60GHz
+with 56GB RAM and an NVIDIA GK210GL [Tesla K80] GPU.
+
+In addition to the quantitative evaluation, we also
+performed a qualitative evaluation by conducting
+an informal user study with 1 user who is one of the 
+leading experts in distributed tracing. Due to time restrictions,
+the user was only able to provide feedback about the text generation
+and trace comparison techniques.
+
 \subsection{Text Generation}
+
+\begin{figure}[tbh]
+    \centering
+    \includegraphics[width=\linewidth]{"fig/summary_cdf"}
+    \caption{CDF of generating text for all the traces in the DeathStarBench dataset}
+    \label{fig:summary_cdf}
+\end{figure}
+
+To measure the scalability of our text generation appraoch, we measure the time taken
+to generate the text for every trace in the DeathStarBench dataset. \autoref{fig:summary_cdf}
+shows the CDF of the breakdown of the total time taken to generate the text. The time taken
+to generate the text is dominated by the time taken to load the data from the backend server.
+However, once the data is available, the time taken to generate the text is less than 10 milliseconds
+for all traces.
+
+To evaluate the quality of the text generated, the user mentioned the following:\textcolor{red}{``The first sentence is the interesting one here; the rest of the sentences are a bit difficult to parse.
+The interesting parts of the first sentence are the comparisons to general statistics about the trace dataset.  I like the last sentence, because it's starting to push towards deriving a 
+root cause for the latency (ie, contention with other tasks), and I think when it's presented as text that's a very digestable representation (vs. some sort of visual interface)."}
+This suggests that the expert user believes that the overview paragraph is very useful for explaining root causes of potential problems and does so better than a potential
+visual interface might. Although, we can still improve our overview by performing comparison for more statistics that a user might care about. Additionally,
+the expert user also suggested \textcolor{red}{``to prune away any boring information and try to get at any root causes (or simply say that the request was normal)"}. This suggests
+that text that the execution information being shown to the user is too verbose and we might need to infer some high-level information about the trace instead.
 
 \subsection{Trace Summarization}
 
