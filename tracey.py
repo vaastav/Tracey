@@ -9,6 +9,8 @@ from mysql.connector import Error, connect
 import os
 import urllib.request
 import diff_match_patch as dmp_module
+import random
+import numpy as np
 from timeit import default_timer as timer
 
 api = Flask(__name__)
@@ -17,6 +19,7 @@ connection = {}
 EVENT_PROB_THRESHOLD=0.25
 TASK_PERCENTILE_THRESHOLD_LOW=5.0
 TASK_PERCENTILE_THRESHOLD_HIGH=95.0
+MISSING_TASK_PEN=5
 LABEL_BLACKLIST = ["ThreadLocalBaggage::Branch", "ThreadLocalBaggage::Set", "ThreadLocalBaggage::Swap", "ThreadLocalBaggage::Join", "ThreadLocalBaggage::Delete"]
 
 class SummaryPerf:
@@ -244,8 +247,16 @@ def dataset_info():
             outf.write(str(t) + "\n")
     return "Done boss\n"
 
-@api.route("/compare/<string:trace1>/<string:trace2>", methods=['GET'])
-def compare(trace1, trace2):
+def compute_distance(task_diffs, unmatched_tasks):
+    dmp = dmp_module.diff_match_patch()
+    distance = 0.0
+    for d in task_diffs:
+        distance += dmp.diff_levenshtein(d)
+    for u in unmatched_tasks:
+        distance += MISSING_TASK_PEN * len(u.split('.'))
+    return distance
+
+def get_trace_diff(trace1, trace2):
     diff = ""
     trace1_summary = open(os.path.join("./summary", trace1 + ".txt"), 'r+').readlines()
     trace2_summary = open(os.path.join("./summary", trace2 + ".txt"), 'r+').readlines()
@@ -254,6 +265,7 @@ def compare(trace1, trace2):
     matched_lines_t2 = set()
     unmatched_lines_t1 = set()
     # We want to compare summaries at the granularity of task
+    task_execution_diffs = []
     for i in range(len(trace1_summary)):
         line1 = trace1_summary[i]
         match_found = False
@@ -279,19 +291,49 @@ def compare(trace1, trace2):
                 dmp.diff_cleanupSemantic(diff)
                 html += dmp.diff_prettyHtml(diff) + "\n"
                 matched_lines_t2.add(j)
+                task_execution_diffs += [diff]
         if not match_found:
             unmatched_lines_t1.add(i)
+    all_unmatched_lines = []
     for i in range(len(trace1_summary)):
         if i in unmatched_lines_t1:
             diff = dmp.diff_main(trace1_summary[i], "")
             dmp.diff_cleanupSemantic(diff)
             html += dmp.diff_prettyHtml(diff) + "\n"
+            all_unmatched_lines += [trace1_summary[i]]
     for j in range(len(trace2_summary)):
         if j not in matched_lines_t2:
             diff = dmp.diff_main("", trace2_summary[j])
             dmp.diff_cleanupSemantic(diff)
             html += dmp.diff_prettyHtml(diff) + "\n"
+            all_unmatched_lines += [trace2_summary[j]]
+    # Calculate distance using all_unmatched_lines and task_execution_diffs 
+    distance = compute_distance(task_execution_diffs, all_unmatched_lines)
+    return distance, html
+
+@api.route("/compare/<string:trace1>/<string:trace2>", methods=['GET'])
+def compare(trace1, trace2):
+    start = timer()
+    dist, html = get_trace_diff(trace1, trace2)
+    end = timer() - start
+    print("Distance is ",dist)
+    print("Time taken is ", end, " seconds")
     return html
+
+@api.route("/comparison_test/", methods=['GET'])
+def comparison_test():
+    traces = get_all_traces()
+    perf_list = []
+    for trace in traces:
+        if len(perf_list) > 100:
+            break
+        # Select a random trace to compare against from the trace list
+        choice = random.choice(traces)
+        start = timer()
+        dist, html = get_trace_diff(trace, choice)
+        end = timer() - start
+        perf_list += [end]
+    return "Average time taken for 100 random trace comparisons was " + str(np.mean(perf_list) * 1000) + " milliseconds\n"
 
 def main():
     global connection
