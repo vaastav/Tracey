@@ -68,18 +68,40 @@ Uploading media to compose post service. Popping client from client pool. Obtain
 
 \subsection{Trace Summarization}
 
-Trace summarization is done at the granularity of a task. This means that all of the documents generated in the previous steps undergo another round of processing.
-Looking at the task level gives us a clear way to create summaries of a group of traces. Additionally, the format of that summary will match the overview generated for a
+We do trace summarization at the granularity of a task. Thus, instead of summarizing the text representations of all the traces we want to summarize,
+we instead summarize the text representations for each task across all traces. Thus, if a set of traces has 30 different tasks,
+we perform 30 different multi-document summarizations to obtain a summary for each task. These task-specific summaries
+are then concatenated together to form the summary of the traces.
+The reason behind doing summarization at the granularity of a task is to ensure that there is no cross-contamination
+of information between the tasks as we don't want the summarized result to have an incorrect text representation.
+Additionally, the format of that summary will now match the overview generated for a
 single trace. This allows us to then be able to make clean comparisons between a single trace and a group of traces using their summary.
-us to accurately evaluate a summary as well as provide a simple method to compare a single trace to a set of traces. Since each task has a relatively set behavior,
+Since each task has a relatively set behavior,
 we can infer that the overview paragraphs describing it will never changes drastically during normal execution. Even though it may be repeated hundreds of times, 
 there will not be an explosion in the number of unique sentences found across traces. This means that the 
-summarization of a task does not have to be a complex job. In fact the simplest method would be taking the set of all unique sentences in the task found across
-traces. However, this would lose the temporal and casual information inherent in the order of the sentences. 
+summarization of a task does not have to be a complex operation.
+We break down our summarization in three steps - Preprocessing, Graph Construction, and Text Conversion - that we describe below.
 
-To preserve this information we provide a graph-based
-approach. Each document in a task is analyzed and the sentences are mapped into a directed graph. Each node in the graph is a unique sentence, and the edges are
-weighted based on how often the connecting node was the following sentence in a document. 
+\fakepara{Preprocessing} In the preprocessing step, text representation for each trace is broken into text representations of each
+task. Based on our text generation algorithm, text representation for a task in a trace is a paragraph.
+Text representations from multiple traces are then grouped together by task. For each task, there are multiple
+paragraphs that need to be summarized. Each such paragraph is represented as its own document such that
+there are multiple documents available for each task.
+
+\fakepara{Graph Construction} For each task, we construct an aggregate weighted graph from the documents associated with that task.
+Each node in the graph represents one unique sentence across the documents. Uniqueness is defined not only by the content
+of the sentence but also by the prefix of sentences that were before the sentence. This is done to ensure that
+when the documents are being aggregated, two sentences are only merged together if they have the same preceding
+sentences. Each edge represents the causal and temporal ordering between sentences. This is constructed by adding
+an edge between each pair of adjacent sentences. The weight of the edge represents the number of documents in
+which that edge was seen.
+
+\fakepara{Text Conversion} To convert the graph into text we first create a topological sort ordering of the vertices
+in the graph. This is to flatten the graph structure as the aggregation would have induced branches in the graph
+because of deviations. We choose a topological sort ordering as it guarantees to preserve the order
+between sentences from all the documents. Once we have the ordering, we simply concatenate the labels
+from the nodes according to the ordering to generate the summary for that particular task.
+Currently, we don't use the weights of the edges in the text generation.
 
 \subsection{Trace Diff}
 
