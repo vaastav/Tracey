@@ -359,16 +359,20 @@ def load_tasks_for_traces(rootdir):
                 sentences = lines[0].strip().split('.')
                 duplicates_counter = {}
                 prev_sentence = ''
+                prefix = ''
                 for s in sentences:
                     # Add each sentence as a separate node. Connect the edges between the nodes.
                     # Need to make sure that sentences with same labels but different positions are different nodes!
-                    current_label = s
-                    if s in duplicates_counter:
-                        # This is a label we hae seen in this paragraph before
-                        current_label = s + '#' + str(duplicates_counter[s])
-                        duplicates_counter[s] += 1
-                    else:
-                        duplicates_counter[s] = 1
+                    # Use the prefix to do that
+                    current_label = s + '#' + prefix
+                    # Update prefix for next iteration
+                    prefix += s + '.'
+                    #if s in duplicates_counter:
+                    #    # This is a label we hae seen in this paragraph before
+                    #    current_label = s + '#' + str(duplicates_counter[s])
+                    #    duplicates_counter[s] += 1
+                    #else:
+                    #    duplicates_counter[s] = 1
                     if not graph.has_node(current_label):
                         graph.add_node(current_label)
                     if prev_sentence != '':
@@ -392,7 +396,20 @@ def convert_graphs_to_text(graphs):
         # Implement graph to text
         summary = ""
         if not is_directed_acyclic_graph(graph):
-            print("Graph is not a DAG WTF")
+            print("Graph is not a DAG for ", key)
+            #print(graph.edges)
+            #for e in graph.edges:
+            #    print(e)
+            #print(len(list(nx.simple_cycles(graph))), " cycles for ", key)
+            max_len = 10000000
+            smallest_cycle = []
+            for c in nx.simple_cycles(graph):
+                if len(c) < max_len:
+                    max_len = len(c)
+                    smallest_cycle = c
+            for v in smallest_cycle:
+                print(v)    
+            #continue
         topo_sorted_vertices = nx.topological_sort(graph)
         i = 0
         for vertex in topo_sorted_vertices:
@@ -406,16 +423,29 @@ def convert_graphs_to_text(graphs):
 
     return paragraphs
 
-@api.route("/summarize_aggregate/", methods=['GET'])
-def summarize_aggregate():
+def get_aggregate_summary(root_dir):
     # Build the sentence graph for each task
-    graphs = load_tasks_for_traces("./summary/preprocessed/scalability/5")
+    graphs = load_tasks_for_traces(root_dir)
     # Convert each graph into a paragraph for that task
     paragraphs = convert_graphs_to_text(graphs)
     summary = ""
     for p, val in paragraphs.items():
         summary += val + '\n'
     return summary
+
+@api.route("/summarize_aggregate/", methods=['GET'])
+def summarize_aggregate():
+    result = ''
+    dirs = ['5', '10', '25', '100', '1000', '10000', '22290']
+    for dir in dirs:
+        start = timer()
+        summary = get_aggregate_summary("./summary/preprocessed/scalability/" + dir)
+        end = timer() - start
+        result_str = "Aggregation " + dir + " traces took " + str(end) + " seconds."
+        print(result_str)
+        result += result_str + '\n'
+
+    return result
 
 def main():
     global connection
