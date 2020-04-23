@@ -29,7 +29,7 @@ and trace comparison techniques.
     \label{fig:summary_cdf}
 \end{figure}
 
-To measure the scalability of our text generation appraoch, we measure the time taken
+To measure the scalability of our text generation approach, we measure the time taken
 to generate the text for every trace in the DeathStarBench dataset. \autoref{fig:summary_cdf}
 shows the CDF of the breakdown of the total time taken to generate the text. The time taken
 to generate the text is dominated by the time taken to load the data from the backend server.
@@ -45,5 +45,27 @@ the expert user also suggested \textcolor{red}{``to prune away any boring inform
 that text that the execution information being shown to the user is too verbose and we might need to infer some high-level information about the trace instead.
 
 \subsection{Trace Summarization}
+
+We explored three metrics to evaluate the summarization of traces. 
+First to determine how reasonable our summarization method is we performed a scalability microbenchmark using a single task from multiple traces. 
+Then we measure the quality of the summary based on the number of unique sentences it was able to capture from the original documents.
+Finally, we perform a macro-scalability test by summarizing all tasks from multiple traces. For each metric we run our own algorithm as well as the potara summarization tool 
+as a baseline.
+
+\fakepara{Micro-scalability} We tested the scalability of the summarizers at a document-level. We split up the summarization to be at a task level. 
+This means that each task in a given summarization job will have its own set of documents. 
+To perform a micro-scalability evaluation we looked at only a single task's documents. We chose a task that had over 500 documents, each one about a paragraph long. 
+We ran the summarization algorithm on an increasing number of tasks and recorded the results which can be seen in Figure \ref{}. Our baseline, potara, is unusable after
+about 100 traces. 
+
+\fakepara{Summary Quality} We determined our summaries should be able to capture a general idea of the ``regular'' execution state of the task being summarized. 
+A task may have hundreds of sentences in its documents, but only 20 are unique. As a metric for summary quality
+we checked how many of the unique sentences in a tasks corpus were present in a summary. The quality results can be found in Figure \ref{}. Potara is not able to capture 
+the a general idea of a regular execution because at max it is using 50\% of the unique sentences in a tasks corpus of sentences. 
+
+\fakepara{Macro-scalability} While it is important to know how a summarizer works at a document level, we are summarizing entire sets of traces. Therefore
+we ran scalability experiments where an increasing number of traces were summarized. Since traces can have multiple tasks, this means that each summarization job 
+in this experiment is actually running multiple times, once for each task, before it is considered complete. We ran these experiments on sets up to 1000 traces large and the 
+results can be found in Figure \ref{}. Similar to the micro-scalability benchmarks, it is important to note the lack of scalability in potara. 
 
 \subsection{Trace Comparison}
