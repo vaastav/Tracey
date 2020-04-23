@@ -5,6 +5,8 @@ import scipy.stats as stats
 from networkx import DiGraph
 from networkx.algorithms import is_directed_acyclic_graph
 from networkx.algorithms.traversal.edgedfs import edge_dfs
+#from networkx.algorithms.dag.topological_sort import topological_sort
+import networkx as nx
 from mysql.connector import Error, connect
 import os
 import urllib.request
@@ -76,6 +78,7 @@ def get_tasks(trace_id):
 def generate_trace_summary(events, tasks, overview):
     summary = "Done boss!"
 
+    # Content Planner
     percentile_scores = {}
     concurrent_tasks = {}
     task_name = {}
@@ -124,6 +127,7 @@ def generate_trace_summary(events, tasks, overview):
         task_id = event['ProcessName'] + str(event['ProcessID']) + str(event['ThreadID'])
         task_events[task_id] += [event['EventID']]
 
+    # Sentence Planner
     # Based on the above data, generate a templated summary for the trace
     template_summary = ""
     # Overview of the trace
@@ -142,6 +146,7 @@ def generate_trace_summary(events, tasks, overview):
         template_summary += " Task performing the operation " + task_name[max_task_contention_id] + " had the maximum amount of contention with " + str(max_task_contention) + " other tasks performing the same operation at the same time for different requests." 
 
     # join labels for each task to get summary for each task
+    # Surface Realization
     task_summaries = {}
     task_start_times = {}
     for task, events in task_events.items():
@@ -334,6 +339,83 @@ def comparison_test():
         end = timer() - start
         perf_list += [end]
     return "Average time taken for 100 random trace comparisons was " + str(np.mean(perf_list) * 1000) + " milliseconds\n"
+
+
+def load_tasks_for_traces(rootdir):
+    # For each task build the graph from the traces
+    tasks = {}
+    for subdir, dirs, files in os.walk(rootdir):
+        # Each subdirectory in the root directory corresponds to a task.
+        # Each file in the subdirectory is the instance of a task
+        if subdir == rootdir:
+            continue
+        if subdir not in tasks:
+            # Initialize the Sentence Graph for each trace
+            tasks[subdir] = DiGraph()
+        graph = tasks[subdir]
+        for file in files:
+            with open(os.path.join(subdir, file), 'r+') as inf:
+                lines = inf.readlines()
+                sentences = lines[0].strip().split('.')
+                duplicates_counter = {}
+                prev_sentence = ''
+                for s in sentences:
+                    # Add each sentence as a separate node. Connect the edges between the nodes.
+                    # Need to make sure that sentences with same labels but different positions are different nodes!
+                    current_label = s
+                    if s in duplicates_counter:
+                        # This is a label we hae seen in this paragraph before
+                        current_label = s + '#' + str(duplicates_counter[s])
+                        duplicates_counter[s] += 1
+                    else:
+                        duplicates_counter[s] = 1
+                    if not graph.has_node(current_label):
+                        graph.add_node(current_label)
+                    if prev_sentence != '':
+                        # Check if edge (prev_sentence, current_label) exists.
+                        # Add the edge to graph if it doesn't.
+                        # If it does then increase the edge count.
+                        if graph.has_edge(prev_sentence, current_label):
+                            graph[prev_sentence][current_label]['count'] += 1
+                        else:
+                            graph.add_edge(prev_sentence, current_label)
+                            graph[prev_sentence][current_label]['count'] = 1
+                    prev_sentence = current_label
+        tasks[subdir] = graph
+
+    return tasks
+
+def convert_graphs_to_text(graphs):
+    # For each graph convert it into a paragraph
+    paragraphs = {}
+    for key, graph in graphs.items():
+        # Implement graph to text
+        summary = ""
+        if not is_directed_acyclic_graph(graph):
+            print("Graph is not a DAG WTF")
+        topo_sorted_vertices = nx.topological_sort(graph)
+        i = 0
+        for vertex in topo_sorted_vertices:
+            i += 1
+            tokens = vertex.split('#')
+            summary += tokens[0]
+            if i != len(topo_sorted_vertices):
+                # Prevent an extra '.' from appearing at the end
+                summary += '.'
+        paragraphs[key] = summary
+
+    return paragraphs
+
+@api.route("/summarize_aggregate/", methods=['GET'])
+def summarize_aggregate():
+    # Build the sentence graph for each task
+    graphs = load_tasks_for_traces("./summary/preprocessed/scalability/5")
+    # Convert each graph into a paragraph for that task
+    paragraphs = convert_graphs_to_text(graphs)
+    summary = ""
+    for p, val in paragraphs.items():
+        summary += val + '\n'
+    return summary
 
 def main():
     global connection
