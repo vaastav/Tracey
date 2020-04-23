@@ -399,7 +399,7 @@ def convert_graphs_to_text(graphs):
             i += 1
             tokens = vertex.split('#')
             summary += tokens[0]
-            if i != len(topo_sorted_vertices):
+            if i != graph.number_of_nodes():
                 # Prevent an extra '.' from appearing at the end
                 summary += '.'
         paragraphs[key] = summary
