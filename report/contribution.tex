@@ -97,8 +97,9 @@ weighted based on how often the connecting node was the following sentence in a 
     \end{equation}
     \end{figure*}
 
-To compare two traces, we choose to compare their corresponding texts. For calculating the difference
-between the two text representations, we use Google's diff-match-patch library\footnote{Library available at \url{https://github.com/google/diff-match-patch}}.
+To compare two traces, or one trace and one aggregate set of traces, or two different aggregate sets of traces, we choose to compare their corresponding texts. For calculating the difference
+between the two text representations, we use Google's diff-match-patch library\footnote{Library available at \url{https://github.com/google/diff-match-patch}}. For explaining our algorithm, we choose to explain the comparison
+of two traces but the same algorithm applies for the other two comparison scenarios.
 However, instead of just computing the diff between the two texts, we strive for a much finer granularity, and instead
 compute the diff between the texts by computing the diffs between the common tasks amongst the two traces.
 Tasks that are only present in either trace are automatically treated as insertions or deletions in the diff.
