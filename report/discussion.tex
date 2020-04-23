@@ -1,2 +1,42 @@
 \section{Discussion \& Future Work}
 \label{sec:discussion}
+
+\subsection{Lessons Learned}
+
+Initially for the text generation task, we wanted to apply textual entailment techniques
+when generating the text but we realized that this will result in loss of detailed information
+that is useful for performing comparisons.
+
+For the text summarization task, our plan was to use an out-of-the-box summarizer like BERT or
+another state-of-the-art multi-document summarizer. But we realized quickly that an out-of-the-box
+summarizer would not work well with our data as the order of the sentences would not be preserved
+as well as the fact that the summarizer won't scale to a large number of traces.
+
+\subsection{Limitations}
+
+Our current text representation has 2 issues. The first issue is that even though the text representation
+captures the temporal and causal ordering, the text representation fails to capture how much time was spent between
+two pairs of events. This information is useful for diagnosing performance issues especially latency bugs.
+The second issue is that the text representation of a task merely presents the information about what happened
+and does not provide any sort of high level inference about the events that happened. The quality of the text representation
+is useful for comparison tasks but not useful for humans as a standalone piece of information.
+
+The summary text generated for each task flattens the graph structure by performing a topological sort.
+This results in there being no indication of branching in the generated text. This is fine for performing
+comparisons but according to our user study, this information is hard to digest as standalone information.
+
+\subsection{Future Work}
+
+As part of our future work, we would enhance the text representation of a trace to address the limitations.
+First, we would introduce a special character that represents a pre-defined time unit. Then, each pair
+of sentences would be separated by the number of time unit characters that represents the amount of time
+elapsed between the events corresponding to the sentences.
+
+Moreover, it is sufficiently clear, that the text representation of a trace generated for comparison is only useful
+for comparison but not necessarily for understanding the execution of a trace. Thus, we would need to develop
+some inference algorithm that can generate high-level inference over the text representation of the trace
+to provide the user with high-level information about the trace.
+
+We also want to enhance our summarization algorithm to somehow include the weights of the edges in the summary graph
+in the generated summary for each task. This would also lead to us creating a weighted distance function whilst performing
+comparisons using the aggregated summary of traces.
