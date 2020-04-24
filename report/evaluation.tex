@@ -46,27 +46,96 @@ that text that the execution information being shown to the user is too verbose 
 
 \subsection{Trace Summarization}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{fig/preprocessing}
+    \caption{Time taken for preprocessing traces for summarization}
+    \label{fig:preprocessing}
+\end{figure}
+
 We explored three metrics to evaluate the summarization of traces. 
 First to determine how reasonable our summarization method is we performed a scalability microbenchmark using a single task from multiple traces. 
 Then we measure the quality of the summary based on the number of unique sentences it was able to capture from the original documents.
-Finally, we perform a macro-scalability test by summarizing all tasks from multiple traces. For each metric we run our own algorithm as well as the potara summarization tool 
-as a baseline.
+Finally, we perform a macro-scalability test by summarizing all tasks from multiple traces. For each metric we run our own algorithm as well as the potara\footnote{Tool available at \url{https://github.com/sildar/potara} } summarization tool
+as a baseline. We chose this tool as this was the only open-source multi document summarizer that we could find that would run out of the box.
+We also tried using BERT but could not properly configure it.
+In addition we also measured how long does it take to perform the preprocessing step. \autoref{fig:preprocessing} shows that the preprocessing
+time grows linearly with the number of traces.
+
+\begin{table}[]
+    \begin{tabular}{|l|l|l|}
+    \hline
+    \makecell{\# of Docs} & \makecell{OS} & \makecell{Potara}    \\
+    \hline
+    \hline
+    5                   & 0.103          & 77.429    \\
+    \hline
+    10                  & 0.105          & 160.240   \\
+    \hline
+    25                  & 0.107          & 404.716   \\
+    \hline
+    100                 & 0.109          & 1711.283  \\
+    \hline
+    500                 & 0.140          & 18118.918 \\
+    \hline
+    \end{tabular}
+    \caption{Time (in s) taken by Potara and Our Summarizer (OS) to summarize varying number of documents for a task}
+    \label{tab:micro}
+\end{table}
 
 \fakepara{Micro-scalability} We tested the scalability of the summarizers at a document-level. We split up the summarization to be at a task level. 
 This means that each task in a given summarization job will have its own set of documents. 
-To perform a micro-scalability evaluation we looked at only a single task's documents. We chose a task that had over 500 documents, each one about a paragraph long. 
-We ran the summarization algorithm on an increasing number of tasks and recorded the results which can be seen in \autoref{}. Our baseline, potara, is unusable after
-about 100 traces. 
+To perform a micro-scalability evaluation we looked at only a single task's documents. For this benchmark, we chose a task that appeared in a large number of traces
+so that we can get a better estimate about the scalability of summarizing a large number of documents for a task. 
+We ran the summarization algorithm on an increasing number of documents for a particular task. \autoref{tab:micro} shows that potara, is unusable after
+about 100 traces and that our summarizer increases sublinearly with the number of documents for a particular task.
 
-\fakepara{Summary Quality} We determined our summaries should be able to capture a general idea of the ``regular'' execution state of the task being summarized. 
-A task may have hundreds of sentences in its documents, but only 20 are unique. As a metric for summary quality
-we checked how many of the unique sentences in a tasks corpus were present in a summary. The quality results can be found in \autoref{}. Potara is not able to capture 
-the a general idea of a regular execution because at max it is using 50\% of the unique sentences in a tasks corpus of sentences. 
+\begin{table}[]
+    \begin{tabular}{|l|l|l|}
+    \hline
+    Num Traces & OS    & Potara    \\ \hline \hline
+    5          & 0.109 & 31.401    \\ \hline
+    10         & 0.116 & 43.979    \\ \hline
+    25         & 0.120 & 625.489   \\ \hline
+    100        & 0.156 & 6096.836  \\ \hline
+    1000       & 0.483 & 72176.924 \\ \hline
+    10000      & 3.851 & DNF       \\ \hline
+    22290      & 8.224 & DNF       \\ \hline
+    \end{tabular}
+    \caption{Time taken (in s) by Our Summarizer (OS) and Potara to summarize a varying number of traces}
+    \label{tab:macro}
+\end{table}
 
 \fakepara{Macro-scalability} While it is important to know how a summarizer works at a document level, we are summarizing entire sets of traces. Therefore
 we ran scalability experiments where an increasing number of traces were summarized. Since traces can have multiple tasks, this means that each summarization job 
-in this experiment is actually running multiple times, once for each task, before it is considered complete. We ran these experiments on sets up to 1000 traces large and the 
-results can be found in \autoref{}. Similar to the micro-scalability benchmarks, it is important to note the lack of scalability in potara. 
+in this experiment is actually running multiple times, once for each task, before it is considered complete. We ran these experiments on sets with varying number of traces.
+\autoref{tab:macro} shows the results for the benchmark. Similar to the micro-scalability benchmarks, it is important to note the lack of scalability in potara. 
+
+\begin{table*}[]
+    \begin{tabular}{|l|l|l|l|l|}
+    \hline
+    Number of documents & Num Matched Sentences - Potara & Num Matched Sentences - OS & Total Sentences \\
+    \hline
+    \hline
+    5                   & 4                              & 16                         & 16              \\
+    \hline
+    10                  & 5                              & 19                         & 19              \\
+    \hline
+    25                  & 7                              & 19                         & 19              \\
+    \hline
+    100                 & 7                              & 20                         & 20              \\
+    \hline
+    500                 & 8                              & 20                         & 20              \\
+    \hline
+    \end{tabular}
+    \caption{Quality comparison of the summary generated by Potara and Our Summarizer (OS) for varying number of documents for a given task}
+    \label{tab:quality}
+\end{table*}
+
+\fakepara{Summary Quality} We determined our summaries should be able to capture a general idea of the ``regular'' execution state of the task being summarized. 
+A task may have hundreds of sentences in its documents, but only 20 are unique. As a metric for summary quality
+we checked how many of the unique sentences in a tasks corpus were present in a summary. \autoref{tab:quality} shows that Potara is not able to capture 
+the a general idea of a regular execution because at max it is using 50\% of the unique sentences in a tasks corpus of sentences.
 
 \subsection{Trace Comparison}
 
