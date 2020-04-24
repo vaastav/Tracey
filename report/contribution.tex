@@ -15,7 +15,7 @@ course last semester\footnote{The source code of the backend server is located a
 The input data for each trace includes, some overview information of the trace,
 the list of events, and the list of tasks for that trace. 
 For each event, the human annotated-text as well as the probability of that event occurring
-is included.
+are included.
 For each task, a list of concurrent tasks that were happening during the task's execution
 are also included. \emph{The goal is to generate a text representation of the trace
 that includes information describing the execution of the trace and overview information
@@ -33,16 +33,16 @@ that would be useful for the user.}
 \fakepara{Content Planning} The content planner parses the input data to extract the information
 needed to generate the overview text and the execution text. From the list of events, the number
 of anomalous events are extracted. An anomalous event is an event that has probability lower
-than a pre-defined threshold. The content planner also constructs a Directed Acyclic Graph
+than a pre-defined threshold. The content planner also constructs a DAG
 of the events based on the causal relationships of the events. For each task in the list of tasks,
-an array of temporally ordered events are created that occurred on that task. The task with most number of
+an array of temporally ordered events are created that occurred on that task. The task with the most number of
 concurrent tasks is also extracted.
 
 \fakepara{Sentence Planning} The sentence planner separates the content by planning to generate one paragraph
 for each task in the trace as well as one paragraph for overview information about the trace.
 The information contained inside the paragraph would be the name of the task that created this task
 and labels from the events associated with the task.
-The overview paragraph provides overview information about the trace such as latency, tags, and other metadata.
+The overview paragraph provides information about the trace such as latency, tags, and other metadata.
 It also includes information about anomalous events and tasks.
 
 \fakepara{Surface Realization} The surface realization is currently static as it is done based on
@@ -69,7 +69,7 @@ Uploading media to compose post service. Popping client from client pool. Obtain
 \subsection{Trace Summarization}
 
 We do trace summarization at the granularity of a task. Thus, instead of summarizing the text representations of all the traces we want to summarize,
-we instead summarize the text representations for each task across all traces. Thus, if a set of traces has 30 different tasks,
+we instead summarize the text representations for each task across all traces. If a set of traces has 30 different tasks,
 we perform 30 different multi-document summarizations to obtain a summary for each task. These task-specific summaries
 are then concatenated together to form the summary of the traces.
 The reason behind doing summarization at the granularity of a task is to ensure that there is no cross-contamination

@@ -57,8 +57,8 @@ We explored three metrics to evaluate the summarization of traces.
 First to determine how reasonable our summarization method is we performed a scalability microbenchmark using a single task from multiple traces. 
 Then we measure the quality of the summary based on the number of unique sentences it was able to capture from the original documents.
 Finally, we perform a macro-scalability test by summarizing all tasks from multiple traces. For each metric we run our own algorithm as well as the potara\footnote{Tool available at \url{https://github.com/sildar/potara} } summarization tool
-as a baseline. We chose this tool as this was the only open-source multi document summarizer that we could find that would run out of the box.
-We also tried using BERT but could not properly configure it.
+as a baseline. We chose this tool as this was the only open-source multi-document summarizer that we could find that would run out of the box on our data.
+We also tried using BERT but could not properly configure it to generate meaningful summaries.
 In addition we also measured how long does it take to perform the preprocessing step. \autoref{fig:preprocessing} shows that the preprocessing
 time grows linearly with the number of traces.
 
@@ -87,8 +87,8 @@ time grows linearly with the number of traces.
 This means that each task in a given summarization job will have its own set of documents. 
 To perform a micro-scalability evaluation we looked at only a single task's documents. For this benchmark, we chose a task that appeared in a large number of traces
 so that we can get a better estimate about the scalability of summarizing a large number of documents for a task. 
-We ran the summarization algorithm on an increasing number of documents for a particular task. \autoref{tab:micro} shows that potara, is unusable after
-about 100 traces and that our summarizer increases sublinearly with the number of documents for a particular task.
+We ran the summarization algorithm on an increasing number of documents for a particular task. \autoref{tab:micro} shows that potara is unusable after
+about 100 traces, and that our summarizer increases sublinearly with the number of documents for a particular task.
 
 \begin{table}[]
     \begin{tabular}{|l|l|l|}
@@ -133,9 +133,9 @@ in this experiment is actually running multiple times, once for each task, befor
 \end{table*}
 
 \fakepara{Summary Quality} We determined our summaries should be able to capture a general idea of the ``regular'' execution state of the task being summarized. 
-A task may have hundreds of sentences in its documents, but only 20 are unique. As a metric for summary quality
-we checked how many of the unique sentences in a tasks corpus were present in a summary. \autoref{tab:quality} shows that Potara is not able to capture 
-the a general idea of a regular execution because at max it is using 50\% of the unique sentences in a tasks corpus of sentences.
+A task may have hundreds of sentences in its documents, but only 20 that are unique. As a metric for summary quality
+we checked how many of the unique sentences in a task's corpus were present in a summary. \autoref{tab:quality} shows that Potara is not able to capture 
+the general idea of a regular execution because at max it is using less than 50\% of the unique sentences in a tasks corpus of sentences.
 
 \subsection{Trace Comparison}
 
